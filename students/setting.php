@@ -1,16 +1,16 @@
 <?php $page = 'setting';
-include("php/dbconnect.php");
-include("php/checklogin.php");
+include("../php/dbconnect.php");
+include("../php/checklogin.php");
 $error = '';
 if (isset($_POST['save'])) {
 
 	$oldpassword = mysqli_real_escape_string($conn, $_POST['oldpassword']);
 	$newpassword = mysqli_real_escape_string($conn, $_POST['newpassword']);
-	$sql = "select * from user where id= '" . $_SESSION['rainbow_uid'] . "' and password='" . md5($oldpassword) . "'";
+	$sql = "select * from student where id= '" . $_SESSION['rainbow_uid'] . "' and upassword='" . sha1($oldpassword) . "'";
 	$q = $conn->query($sql);
 	if ($q->num_rows > 0) {
 
-		$sql = "update user set  password = '" . md5($newpassword) . "' WHERE id = '" . $_SESSION['rainbow_uid'] . "'";
+		$sql = "update student set  upassword = '" . sha1($newpassword) . "' WHERE id = '" . $_SESSION['rainbow_uid'] . "'";
 		$r = $conn->query($sql);
 		echo '<script type="text/javascript">window.location="setting.php?act=1"; </script>';
 	} else {
@@ -30,26 +30,26 @@ if (isset($_POST['save'])) {
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>School Fees Management System</title>
+	<title>Account Setting - SMS </title>
 
 	<!-- BOOTSTRAP STYLES-->
-	<link href="css/bootstrap.css" rel="stylesheet" />
+	<link href="../css/bootstrap.css" rel="stylesheet" />
 	<!-- FONTAWESOME STYLES-->
-	<link href="css/font-awesome.css" rel="stylesheet" />
+	<link href="../css/font-awesome.css" rel="stylesheet" />
 	<!--CUSTOM BASIC STYLES-->
-	<link href="css/basic.css" rel="stylesheet" />
+	<link href="../css/basic.css" rel="stylesheet" />
 	<!--CUSTOM MAIN STYLES-->
-	<link href="css/custom.css" rel="stylesheet" />
+	<link href="../css/custom.css" rel="stylesheet" />
 	<!-- GOOGLE FONTS-->
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 
-	<script src="js/jquery-1.10.2.js"></script>
+	<script src="../js/jquery-1.10.2.js"></script>
 
-	<script type="text/javascript" src="js/validation/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="../js/validation/jquery.validate.min.js"></script>
 
 </head>
 <?php
-include("php/header.php");
+include("layouts/header.php");
 ?>
 <div id="page-wrapper">
 	<div id="page-inner">
@@ -137,11 +137,11 @@ include("php/header.php");
 
 
 <!-- BOOTSTRAP SCRIPTS -->
-<script src="js/bootstrap.js"></script>
+<script src="../js/bootstrap.js"></script>
 <!-- METISMENU SCRIPTS -->
-<script src="js/jquery.metisMenu.js"></script>
+<script src="../js/jquery.metisMenu.js"></script>
 <!-- CUSTOM SCRIPTS -->
-<script src="js/custom1.js"></script>
+<script src="../js/custom1.js"></script>
 
 <script type="text/javascript">
 

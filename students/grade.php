@@ -1,12 +1,16 @@
 <?php $page = 'grade';
-include("php/dbconnect.php");
-include("php/checklogin.php");
+
+include("../php/dbconnect.php");
+include("../php/checklogin.php");
 $errormsg = '';
 $action = "add";
 
 $grade = '';
 $detail = '';
 $id = '';
+
+$session_id = $_SESSION['rainbow_uid'];
+
 if (isset($_POST['save'])) {
 
 	$grade = mysqli_real_escape_string($conn, $_POST['grade']);
@@ -75,36 +79,33 @@ if (isset($_REQUEST['act']) && @$_REQUEST['act'] == "1") {
 	<title>School Fees Management System</title>
 
 	<!-- BOOTSTRAP STYLES-->
-	<link href="css/bootstrap.css" rel="stylesheet" />
+	<link href="../css/bootstrap.css" rel="stylesheet" />
 	<!-- FONTAWESOME STYLES-->
-	<link href="css/font-awesome.css" rel="stylesheet" />
+	<link href="../css/font-awesome.css" rel="stylesheet" />
 	<!--CUSTOM BASIC STYLES-->
-	<link href="css/basic.css" rel="stylesheet" />
+	<link href="../css/basic.css" rel="stylesheet" />
 	<!--CUSTOM MAIN STYLES-->
-	<link href="css/custom.css" rel="stylesheet" />
+	<link href="../css/custom.css" rel="stylesheet" />
 
 
 
 	<!-- GOOGLE FONTS-->
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 
-	<script src="js/jquery-1.10.2.js"></script>
+	<script src="../js/jquery-1.10.2.js"></script>
 
 
 
 </head>
 <?php
-include("php/header.php");
+include("layouts/header.php");
 ?>
 <div id="page-wrapper">
 	<div id="page-inner">
 		<div class="row">
 			<div class="col-md-12">
-				<h1 class="page-head-line">Grade Levels
-					<?php
-					echo (isset($_GET['action']) && @$_GET['action'] == "add" || @$_GET['action'] == "edit") ?
-						' <a href="grade.php" class="btn btn-success btn-sm pull-right" style="border-radius:0%">Go Back </a>' : '<a href="grade.php?action=add" class="btn btn-danger btn-sm pull-right" style="border-radius:0%"><i class="glyphicon glyphicon-plus"></i> Add New Grade </a>';
-					?>
+				<h1 class="page-head-line">My Courses
+
 				</h1>
 
 				<?php
@@ -130,8 +131,6 @@ include("php/header.php");
 						</div>
 						<form action="grade.php" method="post" id="signupForm1" class="form-horizontal">
 							<div class="panel-body">
-
-
 
 
 								<div class="form-group">
@@ -245,9 +244,12 @@ include("php/header.php");
 
 			<link href="css/datatable/datatable.css" rel="stylesheet" />
 
+
+
+
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Manage Class Level
+					Manage My Courses
 				</div>
 				<div class="panel-body">
 					<div class="table-sorting table-responsive">
@@ -256,25 +258,34 @@ include("php/header.php");
 							<thead>
 								<tr>
 									<th>#</th>
-									<th>Class</th>
-									<th>Detail</th>
-									<th>Action</th>
+									<th>CLass</th>
+									<th>Subjects</th>
+									<th>Remarks</th>
 								</tr>
 							</thead>
 							<tbody>
 								<?php
-								$sql = "select * from grade where delete_status='0'";
-								$q = $conn->query($sql);
+							
+							$sql = "select grade.grade, enroll_course.* , course.c_name, course.c_description from enroll_course 
+							JOIN course ON enroll_course.course_id = course.id  
+							JOIN grade ON enroll_course.class_id = grade.id 
+							where  enroll_course.student_id = '$session_id'
+							AND  enroll_course.delete_status = '0'";
+								$q1 = $conn->query($sql);
+								// $r = $q1->fetch_assoc();
+                // print_r($r);
+								// die;
+								// $sql = "select * from student s JOIN grade g ON s.grade = g.id where  s.id = '$session_id' ";
+								// $q = $conn->query($sql);
 								$i = 1;
-								while ($r = $q->fetch_assoc()) {
+								while ($r = $q1->fetch_assoc()) {
+									
 									echo '<tr>
-                                            <td>' . $i . '</td>
-                                            <td>' . $r['grade'] . '</td>
-                                            <td>' . $r['detail'] . '</td>
-											<td>
-											<a href="grade.php?action=edit&id=' . $r['id'] . '" class="btn btn-success btn-xs" style="border-radius:60px;"><span class="glyphicon glyphicon-edit"></span></a>
+													<td>' . $i . '</td>
+													<td>' . $r['grade'] . '</td>
+													<td>' . $r['c_name'] . '</td>
+													<td>' . $r['c_description'] . '</td>
 											
-											<a onclick="return confirm(\'Are you sure you want to delete this record\');" href="grade.php?action=delete&id=' . $r['id'] . '" class="btn btn-danger btn-xs" style="border-radius:60px;"><span class="glyphicon glyphicon-remove"></span></a> </td>
                                         </tr>';
 									$i++;
 								}
@@ -287,7 +298,7 @@ include("php/header.php");
 					</div>
 				</div>
 			</div>
-			<link href="css/datatable/datatable.css" rel="stylesheet" />
+
 			<script src="js/dataTable/jquery.dataTables.min.js"></script>
 			<script>
 				$(document).ready(function () {
@@ -321,11 +332,11 @@ include("php/header.php");
 
 
 <!-- BOOTSTRAP SCRIPTS -->
-<script src="js/bootstrap.js"></script>
+<script src="../js/bootstrap.js"></script>
 <!-- METISMENU SCRIPTS -->
-<script src="js/jquery.metisMenu.js"></script>
+<script src="../js/jquery.metisMenu.js"></script>
 <!-- CUSTOM SCRIPTS -->
-<script src="js/custom1.js"></script>
+<script src="../js/custom1.js"></script>
 
 
 </body>

@@ -12,84 +12,81 @@ $remark = '';
 $contact = '';
 $balance = 0;
 
+$fees = '';
+$admissionfee = '';
+$tutionfee = '';
+$hostelfee = '';
+$transportfee = '';
+$libraryfee = '';
+$otherfee = '';
+
 $about = '';
+$grade = '';
 
 
 if (isset($_POST['save'])) {
 
-
 	$sname = mysqli_real_escape_string($conn, $_POST['sname']);
 	$joindate = mysqli_real_escape_string($conn, $_POST['joindate']);
+
 	$contact = mysqli_real_escape_string($conn, $_POST['contact']);
 	$about = mysqli_real_escape_string($conn, $_POST['about']);
-	$trimEmail = trim($_POST['emailid']);
-	$emailid = mysqli_real_escape_string($conn, $trimEmail);
-	
-  $trimPass = trim($_POST['userpassword']);
-	$userpassword = sha1($trimPass);
+	$emailid = mysqli_real_escape_string($conn, $_POST['emailid']);
+	$grade = mysqli_real_escape_string($conn, $_POST['grade']);
 
-	// $msubject = "";
-	// $count = 0;
-	// foreach ($_POST['course'] as $subject) {
-	// 	$count++;
-	// 	$total = count($_POST['course']);
+	$admfees = mysqli_real_escape_string($conn, $_POST['admfees']);
+	$tufees = mysqli_real_escape_string($conn, $_POST['tufees']);
+	$hfees = mysqli_real_escape_string($conn, $_POST['hsfees']);
+	$libfees = mysqli_real_escape_string($conn, $_POST['libfees']);
+	$trfees = mysqli_real_escape_string($conn, $_POST['trfees']);
+	$otherfees = mysqli_real_escape_string($conn, $_POST['orfees']);
+	$userpassword = mysqli_real_escape_string($conn, sha1($_POST['userpassword']));
 
-	// 	if ($count >= $total) {
-	// 		$msubject .= $subject;
-	// 	} else {
-	// 		$msubject .= $subject . ",";
-	// 	}
+	$msubject = "";
+	$count = 0;
+	foreach ($_POST['course'] as $subject)
+	{
+		$count++;
+		$total = count($_POST['course']);
 
-	// }
+		if($count >= $total) 
+		{
+			$msubject .= $subject;
+		}else{
+			$msubject .= $subject. ",";
+		}
+		
+	}
 
 
 
 	if ($_POST['action'] == "add") {
+		$remark = mysqli_real_escape_string($conn, $_POST['remark']);
+		$fees = mysqli_real_escape_string($conn, $_POST['fees']);
+		$advancefees = mysqli_real_escape_string($conn, $_POST['advancefees']);
+		$balance = $fees - $advancefees;
 
-		$q1 = $conn->query("INSERT INTO student (sname,upassword,joindate,contact,about,emailid) VALUES ('$sname','$userpassword','$joindate','$contact','$about','$emailid')");
-      
-		if($q1){
-			echo '<script type="text/javascript">window.location="student.php?act=1";</script>';
-		}else{
-			echo '<script type="text/javascript">window.location="student.php?act=0";</script>';
+		$q1 = $conn->query("INSERT INTO student (sname,upassword,joindate,contact,about,emailid,grade,balance,fees, subject) VALUES ('$sname','$userpassword','$joindate','$contact','$about','$emailid','$grade','$balance','$fees', '$msubject')");
+
+		$sid = $conn->insert_id;
+
+		$conn->query("INSERT INTO  fees_transaction (stdid,paid,submitdate,transcation_remark) VALUES ('$sid','$advancefees','$joindate','$remark')");
+
+		$conn->query("INSERT INTO  fees_details (stdid,admissionfee, tutionfee,hostelfee,libraryfee,transportfee,otherfee,totalfee) VALUES ('$sid','$admfees','$tufees','$hfees', '$libfees', 'trfees','$otherfees','$fees')");
+
+		echo '<script type="text/javascript">window.location="student.php?act=1";</script>';
+
+	} else
+		if ($_POST['action'] == "update") {
+			$id = mysqli_real_escape_string($conn, $_POST['id']);
+			$sql = $conn->query("UPDATE  student  SET  grade  = '$grade', sname = '$sname', contact = '$contact', about = '$about', emailid = '$emailid'  , subject = '$msubject' WHERE  id  = '$id'");
+			echo '<script type="text/javascript">window.location="student.php?act=2";</script>';
 		}
 
-		
-		// $remark = mysqli_real_escape_string($conn, $_POST['remark']);
-		// $fees = mysqli_real_escape_string($conn, $_POST['fees']);
-		// $advancefees = mysqli_real_escape_string($conn, $_POST['advancefees']);
-		// $balance = $fees - $advancefees;
-		// $sid = $conn->insert_id;
 
-		// $conn->query("INSERT INTO  fees_transaction (stdid,paid,submitdate,transcation_remark) VALUES ('$sid','$advancefees','$joindate','$remark')");
-
-		// $conn->query("INSERT INTO  fees_details (stdid,admissionfee, tutionfee,hostelfee,libraryfee,transportfee,otherfee,totalfee) VALUES ('$sid','$admfees','$tufees','$hfees', '$libfees', 'trfees','$otherfees','$fees')");
-
-	
-
-	}
-
-	if ($_REQUEST['action'] == "update") {
-		 $newPass =  $_POST['userpassword'];
-		$updatePasw = " ";
-	if($newPass){
-		$hashPas = sha1(trim($_POST['userpassword']));
-    $updatePasw = " , upassword = '$hashPas'";
-	}
-	
-
-		$student_id = mysqli_real_escape_string($conn, $_POST['id']);
-	
-		$rp = "UPDATE  student  SET sname = '$sname', contact = '$contact', about = '$about' ,emailid = '$emailid' ".$updatePasw." WHERE  id  = '$student_id'";
-	
-
-		$sql = $conn->query($rp);
-		echo '<script type="text/javascript">window.location="student.php?act=2";</script>';
-
-		$_POST['action'] = "";
-	}
 
 }
+
 
 
 
@@ -103,15 +100,13 @@ if (isset($_GET['action']) && $_GET['action'] == "delete") {
 
 $action = "add";
 if (isset($_GET['action']) && $_GET['action'] == "edit") {
-  
 	$id = isset($_GET['id']) ? mysqli_real_escape_string($conn, $_GET['id']) : '';
-	$sqlEdit = $conn->query("SELECT * FROM student  WHERE student.id='" . $id . "'");
+
+	$sqlEdit = $conn->query("SELECT * FROM student s join fees_details fd ON s.id = fd.stdid  WHERE s.id='" . $id . "'");
 	if ($sqlEdit->num_rows) {
 		$rowsEdit = $sqlEdit->fetch_assoc();
 		extract($rowsEdit);
 		$action = "update";
-		$_POST['action'] = $action;
-	
 	} else {
 		$_GET['action'] = "";
 	}
@@ -119,9 +114,6 @@ if (isset($_GET['action']) && $_GET['action'] == "edit") {
 }
 
 
-if (isset($_REQUEST['act']) && @$_REQUEST['act'] == "0") {
-	$errormsg = "<div class='alert alert-danger'> <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Error! Student record has not been added!</div>";
-}
 if (isset($_REQUEST['act']) && @$_REQUEST['act'] == "1") {
 	$errormsg = "<div class='alert alert-success'> <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Student record has been added!</div>";
 } else if (isset($_REQUEST['act']) && @$_REQUEST['act'] == "2") {
@@ -202,14 +194,43 @@ include("php/header.php");
 									<div class="form-group">
 										<label class="col-sm-2 control-label" for="Old">Full Name* </label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" id="sname" name="sname" value="<?php echo $sname; ?>" />
+											<input type="text" class="form-control" id="sname" name="sname"
+												value="<?php echo $sname; ?>" />
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-sm-2 control-label" for="Old">Contact* </label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" id="contact" name="contact" value="<?php echo $contact; ?>"
-												maxlength="11" />
+											<input type="text" class="form-control" id="contact" name="contact"
+												value="<?php echo $contact; ?>" maxlength="11" />
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label" for="Old">Class* </label>
+										<div class="col-sm-10">
+											<select onchange="changeGrade(this.value)" class="form-control" id="grade" name="grade">
+												<option value="">Select Class </option>
+												<?php
+												$sql = "select * from grade where delete_status='0' order by grade.grade asc";
+												$q = $conn->query($sql);
+
+												while ($r = $q->fetch_assoc()) {
+													echo '<option value="' . $r['id'] . '"  ' . (($grade == $r['id']) ? 'selected="selected"' : '') . '>' . $r['grade'] . '</option>';
+												}
+												?>
+
+											</select>
+										</div>
+									</div>
+
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label" for="Old"> Course* <small> cltr + 'left click'</small> </label>
+										<div class="col-sm-10">
+											<select multiple  class="form-control" id="slCourse" name="course[]">
+												<option value="">Select Course </option>
+											</select>
 										</div>
 									</div>
 
@@ -217,11 +238,109 @@ include("php/header.php");
 									<div class="form-group">
 										<label class="col-sm-2 control-label" for="Old">DOJ* </label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" placeholder="Date of Joining" id="joindate" name="joindate"
+											<input type="text" class="form-control" placeholder="Date of Joining"
+												id="joindate" name="joindate"
 												value="<?php echo ($joindate != '') ? date("Y-m-d", strtotime($joindate)) : ''; ?>"
 												style="background-color: #fff;" readonly />
 										</div>
 									</div>
+								</fieldset>
+
+
+								<fieldset class="scheduler-border">
+									<legend class="scheduler-border">Fee Information:</legend>
+                    
+									<div class="form-group">
+										<label class="col-sm-3 control-label" for="Old">Admission Fees* </label>
+										<div class="col-sm-9">
+											<input type="text" class="form-control getfees" id="admfees" name="admfees"
+												value="<?php echo $admissionfee; ?>" <?php echo ($action == "update") ? "disabled" : ""; ?> required />
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-sm-3 control-label" for="Old">Tution Fees* </label>
+										<div class="col-sm-9">
+											<input type="text" class="form-control getfees" id="tufees" name="tufees"
+												value="<?php echo $tutionfee; ?>" <?php echo ($action == "update") ? "disabled" : ""; ?> required />
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-sm-3 control-label" for="Old">Hostel Fees </label>
+										<div class="col-sm-9">
+											<input type="text" class="form-control getfees" id="hsfees" name="hsfees"
+												value="<?php echo $hostelfee; ?>" <?php echo ($action == "update") ? "disabled" : ""; ?> />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-3 control-label " for="Old">Library Fees </label>
+										<div class="col-sm-9">
+											<input type="text" class="form-control getfees" id="libfees" name="libfees"
+												value="<?php echo $libraryfee; ?>" <?php echo ($action == "update") ? "disabled" : ""; ?> />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-3 control-label" for="Old">Transport Fees </label>
+										<div class="col-sm-9">
+											<input type="text" class="form-control getfees" id="trfees" name="trfees"
+												value="<?php echo $transportfee; ?>" <?php echo ($action == "update") ? "disabled" : ""; ?> />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-3 control-label getfees" for="Old">Other Fees </label>
+										<div class="col-sm-9">
+											<input type="text" class="form-control getfees" id="orfees" name="orfees"
+												value="<?php echo $otherfee; ?>" <?php echo ($action == "update") ? "disabled" : ""; ?> />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-3 control-label" for="Old">Total Fees* </label>
+										<div class="col-sm-9">
+											<input type="text" class="form-control" id="tfees" name="fees"
+												value="<?php echo $fees; ?>" <?php echo ($action == "update") ? "disabled" : ""; ?> readonly="readonly" />
+										</div>
+									</div>
+
+									<?php
+									if ($action == "add") {
+										?>
+										<div class="form-group">
+											<label class="col-sm-3 control-label" for="Old">Advance Fee* </label>
+											<div class="col-sm-9">
+												<input type="text" class="form-control" id="advancefees" name="advancefees"
+													readonly value="0" />
+											</div>
+										</div>
+										<?php
+									}
+									?>
+
+									<div class="form-group">
+										<label class="col-sm-3 control-label" for="Old">Balance </label>
+										<div class="col-sm-9">
+											<input type="text" class="form-control" id="balance" name="balance"
+												value="<?php echo $balance; ?>" disabled />
+										</div>
+									</div>
+
+
+
+
+									<?php
+									if ($action == "add") {
+										?>
+										<div class="form-group">
+											<label class="col-sm-2 control-label" for="Password">Fee Remark </label>
+											<div class="col-sm-10">
+												<textarea class="form-control" id="remark"
+													name="remark"><?php echo $remark; ?></textarea>
+											</div>
+										</div>
+										<?php
+									}
+									?>
+
 								</fieldset>
 
 								<fieldset class="scheduler-border">
@@ -229,10 +348,12 @@ include("php/header.php");
 									<div class="form-group">
 										<label class="col-sm-2 control-label" for="Password">About Student </label>
 										<div class="col-sm-10">
-											<textarea class="form-control" id="about" name="about"><?php echo $about; ?></textarea>
+											<textarea  class="form-control" id="about"
+												name="about"><?php echo $about; ?></textarea>
 										</div>
 									</div>
 
+									
 								</fieldset>
 
 								<fieldset class="scheduler-border">
@@ -242,44 +363,46 @@ include("php/header.php");
 										<label class="col-sm-2 control-label" for="Old">Email Id* </label>
 										<div class="col-sm-10">
 
-											<input type="email" class="form-control" id="emailid" name="emailid" value="<?php echo $emailid; ?>"
-											<?php echo (isset($_GET['action']) && $_GET['action'] == "edit")? "": 'required'; ?>	 />
+											<input type="email" class="form-control" id="emailid" name="emailid"
+												value="<?php echo $emailid; ?>" required />
 										</div>
 									</div>
 
 									<div class="form-group">
 										<label class="col-sm-2 control-label" for="Password">Password* </label>
 										<div class="col-sm-10">
-											<input type="password" class="form-control matchPass" id="upass" name="userpassword" value=""
-											   <?php echo (isset($_GET['action']) && $_GET['action'] == "edit")? "": 'required'; ?>	 />
+										<input type="password" class="form-control matchPass" id="upass" name="userpassword"
+												value="" required />
 										</div>
 									</div>
 
 									<div class="form-group">
 										<label class="col-sm-2 control-label" for="Password">Confirm Password* </label>
 										<div class="col-sm-10">
-											<input type="password" class="form-control matchPass" id="cpass" name="cpassword" value=""
-											<?php echo (isset($_GET['action']) && $_GET['action'] == "edit")? "": 'required'; ?> />
+										<input type="password" class="form-control matchPass" id="cpass" name="cpassword"
+												value="" required />
 										</div>
 										<label id="pnm" class="m-4 text-danger" style="display:none;">password not match</label>
-										
-										 
 									</div>
 								</fieldset>
 
 								<div class="form-group">
 									<div class="col-sm-8 col-sm-offset-2">
-
-
 										<input type="hidden" name="id" value="<?php echo $id; ?>">
 										<input type="hidden" name="action" value="<?php echo $action; ?>">
 
-										<button type="submit" name="save" class="btn btn-success" id="btnSubmit" style="border-radius:0%">Save
-										</button>
+										<button type="submit" name="save" class="btn btn-success" id="btnSubmit"
+											style="border-radius:0%">Save </button>
+
 
 
 									</div>
 								</div>
+
+
+
+
+
 							</div>
 						</form>
 
@@ -294,25 +417,23 @@ include("php/header.php");
 
 			<script type="text/javascript">
 
-			
-
-				function changeGrade(gid) {
-					// alert(gid)
-					$.ajax({
-						type: 'post',
-						url: 'getCoruseByID.php',
-						data: { grade: gid, req: '1' },
-						success: function (data) {
-
-							$('#slCourse').html(data);
+       function changeGrade(gid){
+						// alert(gid)
+						$.ajax({
+            type: 'post',
+            url: 'getCoruseByID.php',
+            data: {grade:gid,req:'1'},
+            success: function (data) {
+							
+              $('#slCourse').html(data);
 							// $("#myModal").modal({backdrop: "static"});
-						}
-					});
-				}
+									}
+								});
+					}
 
 				$(document).ready(function () {
 
-
+					
 
 					$("#joindate").datepicker({
 						dateFormat: "yy-mm-dd",
@@ -358,7 +479,7 @@ include("php/header.php");
 						} else {
 							?>
 			
-							$( "#signupForm1").validate({
+					$( "#signupForm1").validate({
 									rules: {
 										sname: "required",
 										joindate: "required",
@@ -379,7 +500,7 @@ include("php/header.php");
 						}
 						?>
 				
-						errorElement: "em",
+					errorElement: "em",
 								errorPlacement: function (error, element) {
 									// Add the `help-block` class to the error element
 									error.addClass("help-block");
@@ -417,65 +538,65 @@ include("php/header.php");
 
 						}
 			
-				} );
+			} );
 
 
 
-				function calculateFee() {
-					const admissionFee = parseFloat($('#admfees').val()) || 0;
-					const tutionFee = parseFloat($('#tufees').val()) || 0;
-					const transportFee = parseFloat($('#trfees').val()) || 0;
-					const hostelFee = parseFloat($('#hsfees').val()) || 0;
-					const libraryFee = parseFloat($('#libfees').val()) || 0;
-					const otherFee = parseFloat($('#orfees').val()) || 0;
+			function calculateFee(){
+				    const admissionFee = parseFloat($('#admfees').val()) || 0;
+				    const tutionFee = parseFloat($('#tufees').val()) || 0;
+			    	const transportFee = parseFloat($('#trfees').val()) || 0;
+            const hostelFee = parseFloat($('#hsfees').val()) || 0;
+            const libraryFee = parseFloat($('#libfees').val()) || 0;
+            const otherFee = parseFloat($('#orfees').val()) || 0;
 
-					const totalFee = admissionFee + tutionFee + transportFee + hostelFee + libraryFee + otherFee;
-					$('#tfees').val(totalFee);
-					if (totalFee) {
-						if (totalFee != '' && !isNaN(totalFee)) {
-							$("#advancefees").removeAttr("readonly");
-							$("#balance").val(totalFee);
-							$('#advancefees').rules("add", {
-								max: parseInt(totalFee)
-							});
+						const totalFee = admissionFee+ tutionFee + transportFee + hostelFee + libraryFee + otherFee;
+						$('#tfees').val(totalFee);
+           if(totalFee){
+							if (totalFee != '' && !isNaN(totalFee)) {
+								$("#advancefees").removeAttr("readonly");
+								$("#balance").val(totalFee);
+								$('#advancefees').rules("add", {
+									max: parseInt(totalFee)
+								});
 
-						}
-						else {
-							$("#advancefees").attr("readonly", "readonly");
-						}
-					}
+							}
+							else {
+								$("#advancefees").attr("readonly", "readonly");
+							}
+					 }
+					
+			}
 
-				}
+			$('.getfees').on('keyup', calculateFee);
+			calculateFee();
 
-				$('.getfees').on('keyup', calculateFee);
-				calculateFee();
-
-				$('#upass').on('keyup', function () {
-					let inputpassword = $(this).val();
-					let cpassword = $('#cpass').val();
-					if (cpassword != '') {
-						if (inputpassword != cpassword) {
-							$('#btnSubmit').attr("disabled", "disabled");
-							$('#pnm').css('display', 'block');
-						} else {
+			$('#upass').on('keyup', function(){
+				 let inputpassword = $(this).val();
+				 let cpassword = $('#cpass').val();
+				 if(cpassword != ''){
+				    if(inputpassword != cpassword ){
+                $('#btnSubmit').attr("disabled", "disabled");
+								$('#pnm').css('display','block');
+						}	else{
 							$('#btnSubmit').removeAttr("disabled");
-							$('#pnm').css('display', 'none');
-						}
-					}
-				});
-				$('#cpass').on('keyup', function () {
-					let inputpassword = $(this).val();
-					let cpassword = $('#upass').val();
-					if (cpassword != '') {
-						if (inputpassword != cpassword) {
-							$('#btnSubmit').attr("disabled", "disabled");
-							$('#pnm').css('display', 'block');
-						} else {
+							$('#pnm').css('display','none');
+						}  
+				 }
+			});
+			$('#cpass').on('keyup', function(){
+				 let inputpassword = $(this).val();
+				 let cpassword = $('#upass').val();
+				 if(cpassword != ''){
+				    if(inputpassword != cpassword ){
+                $('#btnSubmit').attr("disabled", "disabled");
+								$('#pnm').css('display','block');
+						}	else{
 							$('#btnSubmit').removeAttr("disabled");
-							$('#pnm').css('display', 'none');
-						}
-					}
-				});
+							$('#pnm').css('display','none');
+						}  
+				 }
+			});
 
 				// $("#fees").keyup(function () {
 				// 	$("#advancefees").val("");
@@ -547,9 +668,7 @@ include("php/header.php");
 							</thead>
 							<tbody>
 								<?php
-								$sql = "select  s.*, g.grade AS stdClass from student s 
-								       JOIN grade g ON s.grade = g.id
-								      where s.delete_status='0'";
+								$sql = "select * from student where delete_status='0'";
 								$q = $conn->query($sql);
 								$i = 1;
 								while ($r = $q->fetch_assoc()) {
@@ -557,7 +676,7 @@ include("php/header.php");
 									echo '<tr ' . (($r['balance'] > 0) ? 'class="primary"' : '') . '>
                                             <td>' . $i . '</td>
 											<td>' . $r['sname'] . '<br/>' . $r['contact'] . '</td>
-											<td>' . $r['stdClass'] . '' . '</td>
+											<td>' . $r['grade'] . '' . '</td>
                                             <td>' . date("d M y", strtotime($r['joindate'])) . '</td>
                                             <td>' . $r['fees'] . '</td>
 											<td>' . $r['balance'] . '</td>

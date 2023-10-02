@@ -9,7 +9,7 @@ $sid = (isset($_POST['student']))?mysqli_real_escape_string($conn,$_POST['studen
  $sql = "select s.id,s.sname,s.balance,s.fees,s.contact,b.grade,s.joindate from student as s,grade as b where b.id=s.grade and  s.delete_status='0' and s.id='".$sid."'";
 $q = $conn->query($sql);
 if($q->num_rows>0)
-{
+{ 
 
 $res = $q->fetch_assoc();
 echo '  <form class="form-horizontal" id ="signupForm1" action="fees.php" method="post">
