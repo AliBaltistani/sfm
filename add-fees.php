@@ -444,7 +444,7 @@ if ( $_GET['action'] == "" ) {
                                             <td>' . $r['sname'] ." | ".$r['grade']. '</td>
                                             <td>' . $r['totalfee'] . '</td>
                                             <td>' . $r['remainfees'] . '</td>
-                                            <td>' . $r['timestamp'] . '</td>
+                                            <td>' .date("d-M-Y", strtotime($r['timestamp'])) . '</td>
 											<td>
                      
                       <button class="btn btn-info btn-sm"  onclick="openModel('.$r['id'].')" > More Details </button>
@@ -491,8 +491,8 @@ function openModel(sid){
             data: {student:sid,req:'2'},
             success: function (data) {
               
-              $('#formcontent').html(data);
-			        $("#myModal").modal({backdrop: "static"});
+              $('#formcontent1').html(data);
+			        $("#myModal1").modal({backdrop: "static"});
             }
           });
 
@@ -517,7 +517,7 @@ function openModel(sid){
 
     <!-- Modal -->
 <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg" style="width:90% !important;">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -528,9 +528,30 @@ function openModel(sid){
         
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger" style="border-radius:0%" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" style="border-radius:0%" data-dismiss="modal" >Close</button>
           
-          <button  class="btn btn-primary" id="printButton">Print Slip</button>
+          <button type="button"  class="btn btn-primary" id="printButton" data-dismiss="modal">Print Slip</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!----END Model----->
+
+   <!-- Modal -->
+<div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog modal-lg" >
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Fee Slip: </h4>
+        </div>
+        <div class="modal-body"  id="formcontent1" >
+         
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" style="border-radius:0%" data-dismiss="modal" >Close</button>
+          
         </div>
       </div>
     </div>
@@ -540,27 +561,71 @@ function openModel(sid){
 
     <script>
 
-function printDiv() {
-        //Get the HTML of div
-        var divElements = document.getElementById("myTable").innerHTML;
-        //Get the HTML of whole page
-        var oldPage = document.body.innerHTML;
-        //Reset the page's HTML with div's HTML only
-        document.body.innerHTML = 
-          "<html><head><title></title></head><body>" + 
-          divElements + "</body>";
-        //Print Page
-        window.print();
-        //Restore orignal HTML
-        document.body.innerHTML = oldPage;
 
-    }
-    const printButton = document.getElementById('printButton');
-    printButton.addEventListener('click', printDiv);
+// simple table data download
 
+// function printDiv() {
+        
+//         //Get the HTML of div
+//         var divElements = document.getElementById("myTable").innerHTML;
+//         //Get the HTML of whole page
+       
+//         //Reset the page's HTML with div's HTML only
+//         document.body.innerHTML = 
+//           "<html><head><title></title></head><body>" + 
+//           divElements + "</body>";
+
+//             var oldPage = document.body.innerHTML;
+//         //Print Page
+//         window.print();
+//         //Restore orignal HTML
+//         document.body.innerHTML = oldPage;
+      
+
+//     }
+ // simple table data download
+
+
+    
 
     </script>
 
+
+<script>
+
+// Function to print modal data
+function printModsalData() {
+    // Open the modal (if it's not already open)
+
+
+    // Create a new window for printing
+    const printWindow = window.open('', '', 'width=1200,height=600');
+    printWindow.document.open();
+    printWindow.document.write('<html><head><title>Print Student Fees Slip</title></head><body>');
+    
+    // Get the content of the modal
+    const modalContent = document.querySelector('#myTable').outerHTML;
+    printWindow.document.write(modalContent);
+    
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    
+    // Wait for the document to load before printing
+    printWindow.onload = function () {
+        printWindow.print();
+        // printWindow.close();
+    };
+    
+  
+}
+
+
+const printButton = document.getElementById('printButton');
+    printButton.addEventListener('click', printModsalData);
+
+
+
+  </script>
 
     <!-- <script>
         // Function to print the table data

@@ -1,141 +1,328 @@
-<style>
-        /* Custom CSS for the print format */
-        @media print {
-            body {
-                font-family: Arial, sans-serif;
-                font-size: 12px;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            th, td {
-                border: 1px solid #000;
-                padding: 8px;
-                text-align: left;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-        }
-    </style>
+<?php 
 
-<?php
 include("php/dbconnect.php");
 
-
-echo '<table width="80%" style="margin:auto;" id="myTable" >
-<tr>
-  <td >';
 if (isset($_POST['req']) && $_POST['req'] == '2') {
 
   $sid = (isset($_POST['student'])) ? mysqli_real_escape_string($conn, $_POST['student']) : '';
 
-  
+
   $sql = "SELECT fd.*, std.sname, std.contact, gd.grade FROM fees_details fd 
   JOIN student std ON fd.stdid = std.id 
   JOIN grade gd ON fd.grade_id = gd.id
   WHERE fd.id='$sid'";
-  
+
   $fq = $conn->query($sql);
 
   if ($fq->num_rows > 0) {
     $sr = $fq->fetch_assoc();
-
-
-    echo '
-<h4>Student Info</h4>
-<div class="table-responsive">
-<table class="table table-bordered">
-<tr>
-<th>Full Name</th>
-<td>' . $sr['sname'] . '</td>
-<th>Grade</th>
-<td>' . $sr['grade'] . '</td>
-</tr>
-<tr>
-<th>Contact</th>
-<td>' . $sr['contact'] . '</td>
-<th>Fees Issue </th>
-<td>' . date("d-m-Y", strtotime($sr['timestamp'])) . '</td>
-</tr>
-
-
-</table>
-</div>
-';
-
-echo '
-<h4>Fees Info</h4>
-<div class="table-responsive">
-<table class="table table-bordered">
-<tr>
-<th>Admission Fees</th>
-<td> Rs. ' . $sr['admissionfee'] . '</td>
-<th>Tution Fees</th>
-<td> Rs. ' . $sr['tutionfee'] . '</td>
-</tr>
-<tr>
-<th>Hostel Fees</th>
-<td> Rs. ' . $sr['hostelfee'] . '</td>
-<th>Library Fees</th>
-<td> Rs.' . $sr['libraryfee'] . '</td>
-</tr>
-<tr>
-<th>Transport Fees</th>
-<td> Rs. ' . $sr['transportfee'] . '</td>
-<th>Other Fees</th>
-<td> Rs. ' . $sr['otherfee'] . '</td>
-</tr>
-
-
-</table>
-</div>
-';
-
-
-    echo ' 
-<table  >
-<tr>
-<th>Total Fees: 
-</th>
-<td style="padding-left: 10px;" >' . 'Rs. ' . $sr['totalfee'] . '
-</td>
-</tr>
-
-<tr>
-<th>Total Paid: 
-</th>
-<td style="padding-left: 10px; color:green;" >' . 'Rs. ' . $sr['totalfee'] - $sr['remainfees'] . '
-</td>
-</tr>
-
-<tr>
-<th>Remaning Fees: 
-</th>
-<td style="padding-left: 10px; color:red; " >' . 'Rs. ' . $sr['remainfees'] . '
-</td>
-</tr>
-</table>
- ';
-
-
-  } else {
-    echo 'No fees submit.';
+  extract($sr);
   }
-
-} else {
-  echo "Some thing went wrong.. please try again later";
+  else{
+    die("no records Found");
+  }
 }
-
-
-echo '
-            </td>
-          </tr>
-         </table>
-         ';
-
 ?>
+  
+  <table id="myTable">
+  <style>
+    table{
+      width: 100%;
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    td , th{
+      padding: 5px;
+      
+    }
+    .title{
+      text-align: center;
+    }
+  </style>
+    <tbody>
+      <tr>
+        <!-- Student Copy -->
+        <td>
+          <table style="border-collapse: collapse; " width="100%">
+            <thead style="padding:10px 0;">
+              <tr>
+                <th colspan="4" Class="title">
+                  <h3><strong>SUNRISE PUBLIC SCHOOL MURKUNJA SHIGAR</strong></h3>
+                   <p>Micro Finace Bank Shigar/ Karakuram Coop-Bank Shigar</p>
+                   <h4>Student Copy</h4>
+                </th>
+              </tr>
+              <tr >
+                <td border="none" width="20%">Name: </td>
+                <td width="30%"><u><?php echo $sname; ?> </u></td>
+                <td border="none" width="20%">Class: </td>
+                <td width="30%"><u><?php echo $grade; ?> </u></td>
+              </tr>
+              <tr>
+              <td border="none" width="20%">Roll no: </td>
+                <td width="30%"><u><?php echo $stdid; ?> </u></td>
+                <td border="none" width="20%">Date: </td>
+                <td width="30%"><u><?php echo date("d-M-Y", strtotime($sr['timestamp'])); ?> </u></td>
+              </tr>
+              <tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4">
+                  <table border="1px solid black" style="border-collapse: collapse; " width="100%">
+                    <tbody>
+                      <tr>
+                        <th width="16%">Sr#</th>
+                        <th>Particular</th>
+                        <th>Amount</th>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Admission Fees</td>
+                        <td><?php echo $admissionfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>Tution Fees</td>
+                        <td><?php echo $tutionfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>Hostel Fees</td>
+                        <td><?php echo $hostelfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>4</td>
+                        <td>Library Fees</td>
+                        <td><?php echo $libraryfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>Transport Fees</td>
+                        <td><?php echo $transportfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>6</td>
+                        <td>Other Fees</td>
+                        <td><?php echo $otherfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td><b>7</b></td>
+                        <td><strong>Total Fees</strong> </td>
+                        <td><strong><?php echo $totalfee; ?></strong></td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr style="border: none; margin-top: 20px;">
+                        <td colspan="3" ></td>
+                      </tr>
+                      
+                      <tr style="border: none; margin-top: 20px;">
+                        <td>Paid fees : </td>
+                        <td colspan="2"><?php echo $totalfee-$remainfees; ?></td>
+                      </tr>
+                      <tr style="border: none; margin-top: 20px;">
+                        <td>Remaining fees: </td>
+                        <td colspan="2"><?php echo $remainfees; ?></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+       <!-- end student copy -->
+
+       <!-- Bank Copy -->
+       <td>
+          <table style="border-collapse: collapse; " width="100%">
+            <thead style="padding:10px 0;">
+              <tr>
+                <th colspan="4" Class="title">
+                  <h3><strong>SUNRISE PUBLIC SCHOOL MURKUNJA SHIGAR</strong></h3>
+                   <p>Micro Finace Bank Shigar/ Karakuram Coop-Bank Shigar</p>
+                   <h4>Bank Copy</h4>
+                </th>
+              </tr>
+              <tr >
+                <td border="none" width="20%">Name: </td>
+                <td width="30%"><u><?php echo $sname; ?> </u></td>
+                <td border="none" width="20%">Class: </td>
+                <td width="30%"><u><?php echo $grade; ?> </u></td>
+              </tr>
+              <tr>
+              <td border="none" width="20%">Roll no: </td>
+                <td width="30%"><u><?php echo $stdid; ?> </u></td>
+                <td border="none" width="20%">Date: </td>
+                <td width="30%"><u><?php echo date("d-M-Y", strtotime($sr['timestamp'])); ?> </u></td>
+              </tr>
+              <tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4">
+                  <table border="1px solid black" style="border-collapse: collapse; " width="100%">
+                    <tbody>
+                      <tr>
+                        <th width="16%">Sr#</th>
+                        <th>Particular</th>
+                        <th>Amount</th>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Admission Fees</td>
+                        <td><?php echo $admissionfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>Tution Fees</td>
+                        <td><?php echo $tutionfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>Hostel Fees</td>
+                        <td><?php echo $hostelfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>4</td>
+                        <td>Library Fees</td>
+                        <td><?php echo $libraryfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>Transport Fees</td>
+                        <td><?php echo $transportfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>6</td>
+                        <td>Other Fees</td>
+                        <td><?php echo $otherfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td><b>7</b></td>
+                        <td><strong>Total Fees</strong> </td>
+                        <td><strong><?php echo $totalfee; ?></strong></td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr style="border: none; margin-top: 20px;">
+                        <td colspan="3" ></td>
+                      </tr>
+                      
+                      <tr style="border: none; margin-top: 20px;">
+                        <td>Paid fees : </td>
+                        <td colspan="2"><?php echo $totalfee-$remainfees; ?></td>
+                      </tr>
+                      <tr style="border: none; margin-top: 20px;">
+                        <td>Remaining fees: </td>
+                        <td colspan="2"><?php echo $remainfees; ?></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+       <!-- end Bank copy -->
+
+       <!-- Admin Copy -->
+       <td> 
+         <table style="border-collapse: collapse; " width="100%">
+            <thead style="padding:10px 0;">
+              <tr>
+                <th colspan="4" Class="title">
+                  <h3><strong>SUNRISE PUBLIC SCHOOL MURKUNJA SHIGAR</strong></h3>
+                   <p>Micro Finace Bank Shigar/ Karakuram Coop-Bank Shigar</p>
+                   <h4>Admin/School Copy</h4>
+                </th>
+              </tr>
+              <tr >
+                <td border="none" width="20%">Name: </td>
+                <td width="30%"><u><?php echo $sname; ?> </u></td>
+                <td border="none" width="20%">Class: </td>
+                <td width="30%"><u><?php echo $grade; ?> </u></td>
+              </tr>
+              <tr>
+              <td border="none" width="20%">Roll no: </td>
+                <td width="30%"><u><?php echo $stdid; ?> </u></td>
+                <td border="none" width="20%">Date: </td>
+                <td width="30%"><u><?php echo date("d-M-Y", strtotime($sr['timestamp'])); ?> </u></td>
+              </tr>
+              <tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4">
+                  <table border="1px solid black" style="border-collapse: collapse; " width="100%">
+                    <tbody>
+                      <tr>
+                        <th width="16%">Sr#</th>
+                        <th>Particular</th>
+                        <th>Amount</th>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Admission Fees</td>
+                        <td><?php echo $admissionfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>Tution Fees</td>
+                        <td><?php echo $tutionfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>Hostel Fees</td>
+                        <td><?php echo $hostelfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>4</td>
+                        <td>Library Fees</td>
+                        <td><?php echo $libraryfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>Transport Fees</td>
+                        <td><?php echo $transportfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td>6</td>
+                        <td>Other Fees</td>
+                        <td><?php echo $otherfee; ?></td>
+                      </tr>
+                      <tr>
+                        <td><b>7</b></td>
+                        <td><strong>Total Fees</strong> </td>
+                        <td><strong><?php echo $totalfee; ?></strong></td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr style="border: none; margin-top: 20px;">
+                        <td colspan="3" ></td>
+                      </tr>
+                      
+                      <tr style="border: none; margin-top: 20px;">
+                        <td>Paid fees : </td>
+                        <td colspan="2"><?php echo $totalfee-$remainfees; ?></td>
+                      </tr>
+                      <tr style="border: none; margin-top: 20px;">
+                        <td>Remaining fees: </td>
+                        <td colspan="2"><?php echo $remainfees; ?></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+       <!-- end Admin copy -->
+      
+    </tr>
+    </tbody>
+  </table>
 
 
 

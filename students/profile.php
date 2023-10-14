@@ -6,7 +6,7 @@ $error = '';
 $id = $_SESSION['rainbow_uid'];
 $sql = "select  s.*, g.grade AS stdClass from student s 
 								       JOIN grade g ON s.grade = g.id
-								      where  s.id = ".$id;
+								      where  s.id = " . $id;
 
 $sqlEdit = $conn->query($sql);
 if ($sqlEdit->num_rows) {
@@ -15,10 +15,10 @@ if ($sqlEdit->num_rows) {
 }
 
 if (isset($_REQUEST['acts']) && $_REQUEST['acts'] == "update") {
-  $image_path = 'images/'.$_FILES['image']['name'];
-  $image_temp =  $_FILES['image']['tmp_name'];
+  $image_path = 'images/' . $_FILES['image']['name'];
+  $image_temp = $_FILES['image']['tmp_name'];
   move_uploaded_file($image_temp, $image_path);
-  
+
   $sid = mysqli_real_escape_string($conn, $_REQUEST['sid']);
   $contact = mysqli_real_escape_string($conn, $_REQUEST['contact']);
   $about = mysqli_real_escape_string($conn, $_REQUEST['about']);
@@ -29,6 +29,18 @@ if (isset($_REQUEST['acts']) && $_REQUEST['acts'] == "update") {
 
   $_SESSION['student_detail']['image'] = $image_path;
 
+}
+
+if(isset($_REQUEST['submit_q']) ){
+
+  $sid = mysqli_real_escape_string($conn, $_REQUEST['sid']);
+  $uname = mysqli_real_escape_string($conn, $_REQUEST['uname']);
+  $uemail = mysqli_real_escape_string($conn, $_REQUEST['uemail']);
+  $umessage = mysqli_real_escape_string($conn, $_REQUEST['umessage']);
+
+  $sql = $conn->query("INSERT INTO user_queries(stdid, uname, uemail,umessage) VALUES('$sid', '$uname', '$uemail', '$umessage' )");
+  echo '<script type="text/javascript">window.location="profile.php";</script>';
+  die;
 }
 
 ?>
@@ -148,26 +160,26 @@ include("layouts/header.php");
                   <div class="card-body">
                     <div class="d-flex flex-column align-items-center text-center">
 
-                    <?php if(isset($_SESSION['student_detail']['image'])){
-                      echo '<img src="'.$_SESSION['student_detail']['image'].'" alt="Student" class="rounded-circle"
+                      <?php if (isset($_SESSION['student_detail']['image'])) {
+                        echo '<img src="' . $_SESSION['student_detail']['image'] . '" alt="Student" class="rounded-circle"
                       width="150">';
-                    }else{ ?>
-                      <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle"
-                        width="150">
+                      } else { ?>
+                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle"
+                          width="150">
                         <?php
-                    }
+                      }
 
-if (isset($_GET['acts']) && $_GET['acts'] == "edit") {
-  echo '<input type="file" name="image" value="">';
+                      if (isset($_GET['acts']) && $_GET['acts'] == "edit") {
+                        echo '<input type="file" name="image" value="">';
 
-  echo '<input type="hidden" name="sid" value="'.$id .'">';
-} 
-?>
+                        echo '<input type="hidden" name="sid" value="' . $id . '">';
+                      }
+                      ?>
                       <div class="mt-3">
                         <h3>
                           <?php
-                            echo $sname;
-                          
+                          echo $sname;
+
                           ?>
                         </h3>
 
@@ -190,8 +202,7 @@ if (isset($_GET['acts']) && $_GET['acts'] == "edit") {
                           }
                           ?>
                         </p>
-                        <button class="btn btn-primary">Follow</button>
-                        <button class="btn btn-outline-primary">Message</button>
+                        <button type="button" class="btn btn-primary" onclick="openModel()">Feedback/ Report</button>
                       </div>
                     </div>
                   </div>
@@ -342,12 +353,64 @@ if (isset($_GET['acts']) && $_GET['acts'] == "edit") {
           </form>
         </fieldset>
 
-       
+
       </div>
 
 
     </div>
     <!-- /. ROW  -->
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Your Feedback or Report </h4>
+          </div>
+          <div class="modal-body" id="formcontent">
+            <form action="profile.php" method="post">
+            <table width="80%" style="margin:auto;">
+              <tr>
+                <td>Name:</td>
+                <td>
+                <input type="hidden" name="sid" value="<?php echo $id ?>">
+                  <input type="text" name="uname" class="form-control" placeholder="Enter your full name" required>
+                </td>
+              </tr>
+              <tr>
+                <td>Email:</td>
+                <td>
+                  <input style="margin-top:20px" type="email" name="uemail"class="form-control"
+                    placeholder="Enter your email address">
+                </td>
+              </tr>
+              <tr>
+                <td>Message:</td>
+                <td>
+                  <textarea style="margin-top:20px" name="umessage" class="form-control" required
+                    placeholder="Write your message here..."></textarea>
+                </td>
+              </tr>
+
+              <tr>
+                <td></td>
+                <td >
+                  <input style="margin-top:20px" class="btn btn-success" type="submit" value="Submit" name="submit_q">
+                </td>
+              </tr>
+            </table>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" style="border-radius:0%" data-dismiss="modal">Close</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!----END Model----->
 
 
   </div>
@@ -365,9 +428,13 @@ if (isset($_GET['acts']) && $_GET['acts'] == "edit") {
 <!-- CUSTOM SCRIPTS -->
 <script src="../js/custom1.js"></script>
 
+<script>
+  function openModel() {
+    $("#myModal1").modal({ backdrop: "static" });
+  }
+</script>
+
 <script type="text/javascript">
-
-
   $(document).ready(function () {
 
     $("#signupForm1").validate({

@@ -57,7 +57,7 @@ include("layouts/header.php");
       {
         ?>
 
-      <link href="css/datatable/datatable.css" rel="stylesheet" />
+      <link href="../css/datatable/datatable.css" rel="stylesheet" />
 
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -90,7 +90,7 @@ include("layouts/header.php");
                               <td>' . $r['sname'] . '</td>
                               <td>' . $r['totalfee'] . '</td>
                               <td class="text-danger" >' . $r['remainfees'] . '</td>
-                              <td>' . $r['timestamp'] . '</td>
+                              <td>' . date("d-M-Y", strtotime($r['timestamp'])) . '</td>
 											<td>
                       <button class="btn btn-warning btn-sm"  onclick="FeeInfo('.$r['id'].')" > Fee Info </button>
                       <button class="btn btn-primary btn-sm"  onclick="openModel('.$r['id'].')" > Check Report </button>
@@ -119,13 +119,13 @@ include("layouts/header.php");
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
+    <div class="modal-dialog modal-lg"  style="width:90% !important;">
+      <div class="modal-content" >
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Fee Report</h4>
         </div>
-        <div class="modal-body"  id="formcontent" >
+        <div class="modal-body"  id="formcontent"  >
          
         
         </div>
@@ -138,6 +138,27 @@ include("layouts/header.php");
   </div>
   <!----END Model----->
 
+  
+<!-- Modal -->
+<div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog modal-lg" >
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Fee Report</h4>
+        </div>
+        <div class="modal-body"  id="formcontent1"  >
+         
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" style="border-radius:0%" data-dismiss="modal">Close</button>
+          <button class="btn btn-primary" id="downloadButton1">Download as PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!----END Model----->
 
   </div>
   <!-- /. PAGE INNER  -->
@@ -168,8 +189,8 @@ include("layouts/header.php");
             url: 'getmyfeeinfo.php',
             data: {student:sid,req:'2'},
             success: function (data) {
-              $('#formcontent').html(data);
-			        $("#myModal").modal({backdrop: "static"});
+              $('#formcontent1').html(data);
+			        $("#myModal1").modal({backdrop: "static"});
             }
           });
 
@@ -196,23 +217,83 @@ include("layouts/header.php");
 
 
 <script>
-  function printDiv() {
-        //Get the HTML of div
-        var divElements = document.getElementById("formcontent").innerHTML;
-        //Get the HTML of whole page
-        var oldPage = document.body.innerHTML;
-        //Reset the page's HTML with div's HTML only
-        document.body.innerHTML = 
-          "<html><head><title></title></head><body>" + 
-          divElements + "</body>";
-        //Print Page
-        window.print();
-        //Restore orignal HTML
-        document.body.innerHTML = oldPage;
+  // function printDiv() {
+  //       //Get the HTML of div
+  //       var divElements = document.getElementById("formcontent").innerHTML;
+  //       //Get the HTML of whole page
+  //       var oldPage = document.body.innerHTML;
+  //       //Reset the page's HTML with div's HTML only
+  //       document.body.innerHTML = 
+  //         "<html><head><title></title></head><body>" + 
+  //         divElements + "</body>";
+  //       //Print Page
+  //       window.print();
+  //       //Restore orignal HTML
+  //       document.body.innerHTML = oldPage;
 
-    }
+  //   }
+
+
+    
+// Function to print modal data
+function printModsalData1() {
+    // Open the modal (if it's not already open)
+
+
+    // Create a new window for printing
+    const printWindow = window.open('', '', 'width=1200,height=600');
+    printWindow.document.open();
+    printWindow.document.write('<html><head><title>Print Student Fees Slip</title></head><body>');
+    
+    // Get the content of the modal
+    const modalContent = document.querySelector('#formcontent1').innerHTML;
+    printWindow.document.write(modalContent);
+    
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    
+    // Wait for the document to load before printing
+    printWindow.onload = function () {
+        printWindow.print();
+        // printWindow.close();
+    };
+    
+  
+}
+
+    const printButton1 = document.getElementById('downloadButton1');
+    printButton1.addEventListener('click', printModsalData1);
+
+
+    
+// Function to print modal data
+function printModsalData() {
+    // Open the modal (if it's not already open)
+
+
+    // Create a new window for printing
+    const printWindow = window.open('', '', 'width=1200,height=600');
+    printWindow.document.open();
+    printWindow.document.write('<html><head><title>Print Student Fees Slip</title></head><body>');
+    
+    // Get the content of the modal
+    const modalContent = document.querySelector('#myTable').outerHTML;
+    printWindow.document.write(modalContent);
+    
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    
+    // Wait for the document to load before printing
+    printWindow.onload = function () {
+        printWindow.print();
+        // printWindow.close();
+    };
+    
+  
+}
+
     const printButton = document.getElementById('downloadButton');
-    printButton.addEventListener('click', printDiv);
+    printButton.addEventListener('click', printModsalData);
 
 
     </script>

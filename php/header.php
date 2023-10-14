@@ -24,7 +24,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.php">Student Management</a>
+                <a class="navbar-brand" href="index.php">Admin Panel</a>
             </div>
 
             <center class="navbar-name">
@@ -52,14 +52,15 @@
 					 <li>
                         <a class="<?php if($page=='student'){ echo 'active-menu';}?>" href="student.php"><i class="fa fa-users "></i>Student Management</a>
                     </li>
-                    <li>
-                        <a class="<?php if($page=='student-enroll'){ echo 'active-menu';}?>" href="student-enroll.php"><i class="fa fa-users "></i>Student Enrollment</a>
-                    </li>
-
+                    
                     <li>
                         <a class="<?php if($page=='inact'){ echo 'active-menu';}?>" href="inactivestd.php"><i class="fa fa-toggle-off "></i>In-Active Students</a>
                     </li>
 
+                    <li>
+                        <a class="<?php if($page=='student-enroll'){ echo 'active-menu';}?>" href="student-enroll.php"><i class="fa fa-users "></i>Student Enrollment</a>
+                    </li>
+                    
                     <li>
                         <a class="<?php if($page=='grade'){ echo 'active-menu';}?>" href="grade.php"><i class="fa fa-th-large"></i>Class Manage</a>
                     </li>
@@ -79,7 +80,10 @@
                     </li>
 					
 					 
-					
+                    <li>
+                        <a class="<?php if($page=='student_queries'){ echo 'active-menu';}?>" href="student_queries.php"><i class="fa fa-file-pdf-o "></i>Student Queries.php</a>
+                    </li>
+
 					<li>
                         <a class="<?php if($page=='setting'){ echo 'active-menu';}?>" href="setting.php"><i class="fa fa-cogs "></i>Account Setting</a>
                     </li>

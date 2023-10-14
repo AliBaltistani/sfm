@@ -279,7 +279,7 @@ include("php/header.php");
             url: 'getCoruseByID.php',
             data: { grade: gid, req: '1' },
             success: function (data) {
-
+              
               $('#slCourse').html(data);
               // $("#myModal").modal({backdrop: "static"});
             }
@@ -373,7 +373,8 @@ include("php/header.php");
               </thead>
               <tbody>
                 <?php
-                $sql = "select ec.*, st.sname ,gd.grade, cr.c_name  from  enroll_course  ec 
+                $sql = "select ec.*, st.sname ,gd.grade, cr.c_name  from  
+                enroll_course  ec 
                 JOIN student st ON  ec.student_id = st.id
                 JOIN grade gd ON  ec.class_id = gd.id
                 JOIN course cr ON ec.course_id = cr.id
@@ -382,7 +383,9 @@ include("php/header.php");
                 $i = 1;
                 while ($r = $q->fetch_assoc()) {
                   
-                  $url = "action=edit&id=".$r['id']."&std=".$r['student_id']."&cls=".$r['class_id']."&crs=".$r['course_id'];
+                  $url = "action=edit&id=".$r['id']."&std=".$r['student_id']."&cls=".$r['class_id']."&crs=".
+                  
+                  $r['course_id'];
                   echo '<tr>
                           <td>' . $i . '</td>
                           <td>' . $r['sname'] . '</td>

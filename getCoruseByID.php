@@ -1,4 +1,5 @@
  <?php
+ 
  include("php/dbconnect.php");
       $gid = $_POST['grade'];
     $sql = "select * from course where delete_status='0' AND grade_id = '$gid' ";

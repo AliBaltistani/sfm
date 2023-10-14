@@ -309,24 +309,59 @@ include("php/header.php");
 
 
     <script>
-     
-     function printDiv() {
-        //Get the HTML of div
-        var divElements = document.getElementById("formcontent").innerHTML;
-        //Get the HTML of whole page
-        var oldPage = document.body.innerHTML;
-        //Reset the page's HTML with div's HTML only
-        document.body.innerHTML = 
-          "<html><head><title></title></head><body>" + 
-          divElements + "</body>";
-        //Print Page
-        window.print();
-        //Restore orignal HTML
-        document.body.innerHTML = oldPage;
 
-    }
-    const printButton = document.getElementById('printButton');
-    printButton.addEventListener('click', printDiv);
+
+// Function to print modal data
+function printModsalData() {
+    // Open the modal (if it's not already open)
+
+
+    // Create a new window for printing
+    const printWindow = window.open('', '', 'width=1200,height=600');
+    printWindow.document.open();
+    printWindow.document.write('<html><head><title>Print Student Fees Report</title></head><body>');
+    
+    // Get the content of the modal
+    const modalContent = document.querySelector('#formcontent').innerHTML;
+    printWindow.document.write(modalContent);
+    
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    
+    // Wait for the document to load before printing
+    printWindow.onload = function () {
+        printWindow.print();
+        // printWindow.close();
+    };
+    
+  
+}
+
+
+const printButton = document.getElementById('printButton');
+    printButton.addEventListener('click', printModsalData);
+    
+
+
+
+     
+    //  function printDiv() {
+    //     //Get the HTML of div
+    //     var divElements = document.getElementById("formcontent").innerHTML;
+    //     //Get the HTML of whole page
+    //     var oldPage = document.body.innerHTML;
+    //     //Reset the page's HTML with div's HTML only
+    //     document.body.innerHTML = 
+    //       "<html><head><title></title></head><body>" + 
+    //       divElements + "</body>";
+    //     //Print Page
+    //     window.print();
+    //     //Restore orignal HTML
+    //     document.body.innerHTML = oldPage;
+
+    // }
+    // const printButton = document.getElementById('printButton');
+    // printButton.addEventListener('click', printDiv);
 
 
     </script>

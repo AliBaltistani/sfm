@@ -8,15 +8,16 @@
     $username =  mysqli_real_escape_string($conn,trim($_POST['username']));
     $password =  mysqli_real_escape_string($conn,$_POST['password']);
 
-    if($username=='' || $password=='')
+    if($username == '' || $password == '')
     {
     $error='All fields are required';
     }
 
-    $sql = "select * from user where username='".$username."' and password = '".md5($password)."'";
+    $sql = " select * from user where username = '".$username."' and password = '".md5($password)."'";
 
     $q = $conn->query($sql);
-    if($q->num_rows==1)
+
+    if( $q->num_rows == 1 )
     {
     $res = $q->fetch_assoc();
     $_SESSION['rainbow_username']=$res['username'];

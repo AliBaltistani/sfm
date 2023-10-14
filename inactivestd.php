@@ -1,6 +1,7 @@
 <?php $page='inact';
 include("php/dbconnect.php");
 include("php/checklogin.php");
+
 $errormsg = '';
 $action = "add";
 
@@ -128,7 +129,7 @@ include("php/header.php");
                                     </thead>
                                     <tbody>
 									<?php
-									$sql = "select * from student where delete_status='1'";
+									$sql = "select * from student where delete_status='1' ";
 									$q = $conn->query($sql);
 									$i=1;
 									while($r = $q->fetch_assoc())

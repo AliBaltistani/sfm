@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 02, 2023 at 06:21 AM
+-- Generation Time: Oct 11, 2023 at 02:19 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -78,7 +78,12 @@ INSERT INTO `enroll_course` (`id`, `student_id`, `class_id`, `course_id`, `dos`,
 (24, 43, 19, 19, '2023-09-30 12:26:10', NULL, 1),
 (28, 49, 19, 17, '2023-10-02 08:38:41', NULL, 0),
 (29, 49, 19, 19, '2023-10-02 08:38:41', NULL, 0),
-(30, 49, 19, 18, '2023-10-02 08:38:41', NULL, 1);
+(30, 49, 19, 18, '2023-10-02 08:38:41', NULL, 1),
+(31, 50, 13, 12, '2023-10-10 23:28:10', NULL, 0),
+(32, 50, 13, 13, '2023-10-10 23:28:10', NULL, 0),
+(33, 51, 19, 17, '2023-10-10 23:31:33', NULL, 0),
+(34, 51, 19, 18, '2023-10-10 23:31:33', NULL, 0),
+(35, 51, 19, 19, '2023-10-10 23:31:33', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -112,7 +117,8 @@ INSERT INTO `fees_details` (`id`, `stdid`, `grade_id`, `admissionfee`, `tutionfe
 (21, 43, 19, 5000, 2000, 2000, 200, 2000, 200, 11400, 0, 10900, 0, '2023-09-01 00:00:00'),
 (22, 43, 19, 0, 6000, 5000, 0, 0, 0, 11000, 0, 11000, 0, '2023-10-01 00:00:00'),
 (24, 49, 19, 1000, 3000, 0, 2000, 2000, 0, 8000, 0, 7700, 0, '2023-10-02 00:00:00'),
-(25, 49, 19, 0, 3000, 0, 2000, 2000, 0, 7000, 0, 7000, 0, '2023-11-02 00:00:00');
+(25, 49, 19, 0, 3000, 0, 2000, 2000, 0, 7000, 0, 7000, 0, '2023-11-02 00:00:00'),
+(26, 51, 19, 1000, 20000, 0, 0, 0, 0, 21000, 0, 15000, 0, '2023-10-11 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -137,7 +143,11 @@ CREATE TABLE `fees_transaction` (
 INSERT INTO `fees_transaction` (`id`, `trans_id`, `stdid`, `grade`, `paid`, `submitdate`, `transcation_remark`) VALUES
 (55, 20, '42', 'Class 5th', 900, '2023-09-29 09:18:03', 'Initial Payment received'),
 (56, 21, '43', 'Class 5th', 500, '2023-09-30 12:29:44', '500 received'),
-(57, 24, '49', 'Class 5th', 300, '2023-10-02 08:41:33', '300 Payment received');
+(57, 24, '49', 'Class 5th', 300, '2023-10-02 08:41:33', '300 Payment received'),
+(58, 26, '51', 'Class 5th', 1000, '2023-10-11 03:41:19', 'payment received '),
+(59, 26, '51', 'Class 5th', 1500, '2023-10-11 03:41:35', 'payment received'),
+(60, 26, '51', 'Class 5th', 3000, '2023-10-11 03:41:48', 'received'),
+(61, 26, '51', 'Class 5th', 500, '2023-10-11 03:42:01', 'received');
 
 -- --------------------------------------------------------
 
@@ -194,7 +204,9 @@ CREATE TABLE `student` (
 INSERT INTO `student` (`id`, `emailid`, `upassword`, `sname`, `joindate`, `about`, `contact`, `fees`, `grade`, `balance`, `delete_status`, `subject`, `image`) VALUES
 (42, 'sajidali@gmail.com', '5807ce7e9cb25bacaf6ee26cf806245704d3544b', 'Sajid Ali', '2023-09-01 00:00:00', 'New Student', '03488092160', 9900, '19', 9000, '0', NULL, NULL),
 (43, 'demouser1@gmail.com', '1b5e54fe88b68bc480860406e0fc688edde58fcd', 'Demo User1', '2023-09-01 00:00:00', 'New Student', '03481234888', 11000, '19', 11000, '0', NULL, NULL),
-(49, 'mali123@gmail.com', '5cf64593ce4aeacd56dbb5f5ec4db1fb30c6541a', 'M Ali', '2023-10-01 00:00:00', 'New Enroll ', '03495823432', 7000, '19', 7000, '0', NULL, 'images/my-pic.jpg');
+(49, 'mali123@gmail.com', '5cf64593ce4aeacd56dbb5f5ec4db1fb30c6541a', 'M Ali', '2023-10-01 00:00:00', 'New Enroll ', '03495823432', 7000, '19', 7000, '0', NULL, 'images/my-pic.jpg'),
+(50, 'mhdali@gmail.com', '11327ddc6c6fce12cebf73b9e89b6ecdcdfc95ee', 'M Ali', '2023-10-01 00:00:00', 'new student enroll', '0382342324', 0, '13', 0, '1', NULL, NULL),
+(51, 'shakoorali@gmail.com', '28d09525e39fe33e30f641e9c3df1542f4907466', 'Shakoor Ali', '2023-10-02 00:00:00', 'new student  ', '028423424', 21000, '19', 15000, '0', NULL, 'images/WhatsApp Image 2023-09-21 at 22.21.07.jpg');
 
 -- --------------------------------------------------------
 
@@ -217,6 +229,30 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `username`, `password`, `name`, `emailid`, `lastlogin`) VALUES
 (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'admin@gmail.com', '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_queries`
+--
+
+CREATE TABLE `user_queries` (
+  `id` int(11) NOT NULL,
+  `stdid` int(11) DEFAULT NULL,
+  `uname` varchar(250) DEFAULT NULL,
+  `uemail` varchar(250) DEFAULT NULL,
+  `umessage` text DEFAULT NULL,
+  `delete_status` int(11) DEFAULT 0,
+  `timestamp` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_queries`
+--
+
+INSERT INTO `user_queries` (`id`, `stdid`, `uname`, `uemail`, `umessage`, `delete_status`, `timestamp`) VALUES
+(1, 0, 'mu ali', 'ads@mfil.com', 'megsar dfsadfsa', 0, '2023-10-10 23:44:27'),
+(2, 51, 'newer', 'muhammadalid15@gmail.com', 'sfhhdfhadf', 0, '2023-10-10 23:46:35');
 
 --
 -- Indexes for dumped tables
@@ -269,6 +305,12 @@ ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `user_queries`
+--
+ALTER TABLE `user_queries`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -282,19 +324,19 @@ ALTER TABLE `course`
 -- AUTO_INCREMENT for table `enroll_course`
 --
 ALTER TABLE `enroll_course`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `fees_details`
 --
 ALTER TABLE `fees_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `fees_transaction`
 --
 ALTER TABLE `fees_transaction`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `grade`
@@ -306,13 +348,19 @@ ALTER TABLE `grade`
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `user_queries`
+--
+ALTER TABLE `user_queries`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables

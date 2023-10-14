@@ -1,6 +1,8 @@
 <?php $page = 'student';
+
 include("php/dbconnect.php");
 include("php/checklogin.php");
+
 $errormsg = '';
 $action = "add";
 
@@ -11,12 +13,10 @@ $joindate = '';
 $remark = '';
 $contact = '';
 $balance = 0;
-
 $about = '';
 
 
 if (isset($_POST['save'])) {
-
 
 	$sname = mysqli_real_escape_string($conn, $_POST['sname']);
 	$joindate = mysqli_real_escape_string($conn, $_POST['joindate']);
@@ -27,20 +27,6 @@ if (isset($_POST['save'])) {
 	
   $trimPass = trim($_POST['userpassword']);
 	$userpassword = sha1($trimPass);
-
-	// $msubject = "";
-	// $count = 0;
-	// foreach ($_POST['course'] as $subject) {
-	// 	$count++;
-	// 	$total = count($_POST['course']);
-
-	// 	if ($count >= $total) {
-	// 		$msubject .= $subject;
-	// 	} else {
-	// 		$msubject .= $subject . ",";
-	// 	}
-
-	// }
 
 
 
@@ -53,17 +39,6 @@ if (isset($_POST['save'])) {
 		}else{
 			echo '<script type="text/javascript">window.location="student.php?act=0";</script>';
 		}
-
-		
-		// $remark = mysqli_real_escape_string($conn, $_POST['remark']);
-		// $fees = mysqli_real_escape_string($conn, $_POST['fees']);
-		// $advancefees = mysqli_real_escape_string($conn, $_POST['advancefees']);
-		// $balance = $fees - $advancefees;
-		// $sid = $conn->insert_id;
-
-		// $conn->query("INSERT INTO  fees_transaction (stdid,paid,submitdate,transcation_remark) VALUES ('$sid','$advancefees','$joindate','$remark')");
-
-		// $conn->query("INSERT INTO  fees_details (stdid,admissionfee, tutionfee,hostelfee,libraryfee,transportfee,otherfee,totalfee) VALUES ('$sid','$admfees','$tufees','$hfees', '$libfees', 'trfees','$otherfees','$fees')");
 
 	
 
@@ -107,8 +82,11 @@ if (isset($_GET['action']) && $_GET['action'] == "edit") {
 	$id = isset($_GET['id']) ? mysqli_real_escape_string($conn, $_GET['id']) : '';
 	$sqlEdit = $conn->query("SELECT * FROM student  WHERE student.id='" . $id . "'");
 	if ($sqlEdit->num_rows) {
+
 		$rowsEdit = $sqlEdit->fetch_assoc();
+
 		extract($rowsEdit);
+		
 		$action = "update";
 		$_POST['action'] = $action;
 	
@@ -549,7 +527,7 @@ include("php/header.php");
 								<?php
 								$sql = "select  s.*, g.grade AS stdClass from student s 
 								       JOIN grade g ON s.grade = g.id
-								      where s.delete_status='0'";
+								      where s.delete_status='0' ";
 								$q = $conn->query($sql);
 								$i = 1;
 								while ($r = $q->fetch_assoc()) {
