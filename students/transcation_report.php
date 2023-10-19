@@ -7,7 +7,8 @@ if (isset($_POST['req']) && $_POST['req'] == '2') {
   $sid = (isset($_POST['student'])) ? mysqli_real_escape_string($conn, $_POST['student']) : '';
 
 
-  $sql = "SELECT fd.*, std.sname, std.contact, gd.grade FROM fees_details fd 
+  $sql = "SELECT fd.*, std.sname, std.contact, gd.grade 
+  FROM fees_details fd 
   JOIN student std ON fd.stdid = std.id 
   JOIN grade gd ON fd.grade_id = gd.id
   WHERE fd.id='$sid'";

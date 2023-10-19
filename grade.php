@@ -126,24 +126,17 @@ include("php/header.php");
 				<div class="col-sm-8 col-sm-offset-2">
 					<div class="panel panel-success">
 						<div class="panel-heading">
-							<?php echo ($action == "add") ? "Add Grade" : "Edit Grade"; ?>
+							<?php echo ($action == "add") ? "Add Class" : "Edit Class"; ?>
 						</div>
 						<form action="grade.php" method="post" id="signupForm1" class="form-horizontal">
 							<div class="panel-body">
 
-
-
-
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="Old">Grade </label>
+									<label class="col-sm-2 control-label" for="Old">Student Class </label>
 									<div class="col-sm-10">
-										<input type="text" class="form-control" id="grade" name="grade" value="<?php echo $grade; ?>" />
+										<input type="text" class="form-control" id="grade" name="grade" value="<?php echo $grade; ?>" required />
 									</div>
 								</div>
-
-
-
-
 
 								<div class="form-group">
 									<label class="col-sm-2 control-label" for="Confirm"> Detail</label>

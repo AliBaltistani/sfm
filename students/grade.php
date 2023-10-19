@@ -266,7 +266,8 @@ include("layouts/header.php");
 							<tbody>
 								<?php
 							
-							$sql = "select grade.grade, enroll_course.* , course.c_name, course.c_description from enroll_course 
+							$sql = "select grade.grade, enroll_course.* , course.c_name, course.c_description 
+							from enroll_course 
 							JOIN course ON enroll_course.course_id = course.id  
 							JOIN grade ON enroll_course.class_id = grade.id 
 							where  enroll_course.student_id = '$session_id'

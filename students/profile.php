@@ -164,7 +164,7 @@ include("layouts/header.php");
                         echo '<img src="' . $_SESSION['student_detail']['image'] . '" alt="Student" class="rounded-circle"
                       width="150">';
                       } else { ?>
-                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle"
+                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="student" class="rounded-circle"
                           width="150">
                         <?php
                       }

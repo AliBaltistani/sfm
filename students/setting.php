@@ -1,4 +1,5 @@
 <?php $page = 'setting';
+
 include("../php/dbconnect.php");
 include("../php/checklogin.php");
 $error = '';

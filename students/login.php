@@ -9,7 +9,7 @@
     echo $password =  mysqli_real_escape_string($conn,sha1($_POST['password']));
   
 
-    if($username=='' || $password=='')
+    if($username =='' || $password =='')
     {
     $error='All fields are required';
     }

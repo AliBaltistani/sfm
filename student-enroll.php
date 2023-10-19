@@ -1,6 +1,7 @@
 <?php $page = 'student-enroll';
 include("php/dbconnect.php");
 include("php/checklogin.php");
+
 $errormsg = '';
 $action = "add";
 
@@ -8,7 +9,6 @@ $grade = '';
 $detail = '';
 $id = '';
 if (isset($_POST['save'])) {
-
   
 
   $std_id = mysqli_real_escape_string($conn, $_POST['std_id']);
@@ -16,7 +16,6 @@ if (isset($_POST['save'])) {
   $courses =  $_POST['course'];
 
 
-  
   if ($_POST['action'] == "sv1") {
 
     foreach($courses as $crs)
@@ -73,11 +72,11 @@ if (isset($_GET['action']) && $_GET['action'] == "edit") {
 
 
 if (isset($_REQUEST['act']) && @$_REQUEST['act'] == "1") {
-  $errormsg = "<div class='alert alert-success'> Grade has been added successfully</div>";
+  $errormsg = "<div class='alert alert-success'> Class has been added successfully</div>";
 } else if (isset($_REQUEST['act']) && @$_REQUEST['act'] == "2") {
-  $errormsg = "<div class='alert alert-success'> Grade has been updated successfully</div>";
+  $errormsg = "<div class='alert alert-success'> Class has been updated successfully</div>";
 } else if (isset($_REQUEST['act']) && @$_REQUEST['act'] == "3") {
-  $errormsg = "<div class='alert alert-success'> Grade has been deleted successfully</div>";
+  $errormsg = "<div class='alert alert-success'> Class has been deleted successfully</div>";
 }
 
 ?>
@@ -205,6 +204,7 @@ include("php/header.php");
                       <select  class="form-control" id="slCourse" name="crs_up"  required>
                         <option value="">Select Course </option>
                         <?php 
+
                          $gradeID = $_GET['cls'];
                          $sql_crs = "select * from course  where grade_id = '$gradeID' AND delete_status='0' ";
                        

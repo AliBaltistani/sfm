@@ -68,7 +68,7 @@ include("php/header.php");
 					
 					 <div class="col-md-4">
                         <div class="main-box mb-secondary">
-                            <a href="report.php">
+                            <a href="grade.php">
                                 <i class="fa fa-th-large fa-5x"></i>
                                 <h4>Available Classes: <?php include 'counter/totalgrade.php'?></h4>
                                 <h5>School Classes Levels</h5>
@@ -81,9 +81,9 @@ include("php/header.php");
                 <div class="row">
                     <div class="col-md-4">
                         <div class="main-box mb-dull">
-                            <a href="student.php">
+                            <a href="course.php">
                                 <i class="fa fa-toggle-on fa-5x"></i>
-                                <h5>Active Students: <?php include 'counter/activecount.php'?></h5>
+                                <h5>Available Courses: </h5>
                             </a>
                         </div>
                     </div>
@@ -99,21 +99,14 @@ include("php/header.php");
 
                     <div class="col-md-4">
                         <div class="main-box mb-maroon">
-                            <a href="report.php">
+                            <a href="inactivestd.php">
                                 <i class="fa fa-toggle-off fa-5x"></i>
                                 <h5>In-Active Students: <?php include("counter/inactivecount.php"); ?></h5>
                             </a>
                         </div>
                     </div>
 
-                    <!-- <div class="col-md-4">
-                        <div class="main-box mb-yell">
-                            <a href="inactivestd.php">
-                                <i class="fa fa-toggle-off fa-5x"></i>
-                               
-                            </a>
-                        </div>
-                    </div> -->
+    
                 </div>
                 <!-- /. ROW  -->
 

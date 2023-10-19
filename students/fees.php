@@ -79,7 +79,8 @@ include("layouts/header.php");
               </thead>
               <tbody>
                 <?php
-                $sql = "select fd.* ,s.sname from fees_details fd 
+                $sql = "select fd.* ,s.sname 
+                from fees_details fd 
                 JOIN student s ON fd.stdid = s.id
                 where  s.id = '$session_id' ";
                 $q = $conn->query($sql);
@@ -92,7 +93,7 @@ include("layouts/header.php");
                               <td class="text-danger" >' . $r['remainfees'] . '</td>
                               <td>' . date("d-M-Y", strtotime($r['timestamp'])) . '</td>
 											<td>
-                      <button class="btn btn-warning btn-sm"  onclick="FeeInfo('.$r['id'].')" > Fee Info </button>
+                      <button class="btn btn-warning btn-sm"  onclick="FeeInfo('.$r['id'].')" > Generate Slip </button>
                       <button class="btn btn-primary btn-sm"  onclick="openModel('.$r['id'].')" > Check Report </button>
 											</td>
 											';

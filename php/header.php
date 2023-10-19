@@ -81,7 +81,7 @@
 					
 					 
                     <li>
-                        <a class="<?php if($page=='student_queries'){ echo 'active-menu';}?>" href="student_queries.php"><i class="fa fa-file-pdf-o "></i>Student Queries.php</a>
+                        <a class="<?php if($page=='student_queries'){ echo 'active-menu';}?>" href="student_queries.php"><i class="fa fa-file-pdf-o "></i>Student Queries</a>
                     </li>
 
 					<li>
