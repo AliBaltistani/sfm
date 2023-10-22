@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 11, 2023 at 02:19 AM
+-- Generation Time: Oct 22, 2023 at 05:12 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -70,20 +70,16 @@ CREATE TABLE `enroll_course` (
 --
 
 INSERT INTO `enroll_course` (`id`, `student_id`, `class_id`, `course_id`, `dos`, `remark`, `delete_status`) VALUES
-(19, 42, 19, 17, '2023-09-29 09:13:08', NULL, 0),
-(20, 42, 19, 18, '2023-09-29 09:13:08', NULL, 0),
-(21, 42, 19, 19, '2023-09-29 09:13:08', NULL, 0),
-(22, 43, 19, 17, '2023-09-30 12:26:10', NULL, 0),
-(23, 43, 19, 18, '2023-09-30 12:26:10', NULL, 0),
-(24, 43, 19, 19, '2023-09-30 12:26:10', NULL, 1),
-(28, 49, 19, 17, '2023-10-02 08:38:41', NULL, 0),
-(29, 49, 19, 19, '2023-10-02 08:38:41', NULL, 0),
-(30, 49, 19, 18, '2023-10-02 08:38:41', NULL, 1),
-(31, 50, 13, 12, '2023-10-10 23:28:10', NULL, 0),
-(32, 50, 13, 13, '2023-10-10 23:28:10', NULL, 0),
-(33, 51, 19, 17, '2023-10-10 23:31:33', NULL, 0),
-(34, 51, 19, 18, '2023-10-10 23:31:33', NULL, 0),
-(35, 51, 19, 19, '2023-10-10 23:31:33', NULL, 0);
+(36, 52, 19, 17, '2023-10-22 12:35:29', NULL, 0),
+(37, 52, 19, 18, '2023-10-22 12:35:29', NULL, 0),
+(38, 52, 19, 19, '2023-10-22 12:35:29', NULL, 0),
+(39, 52, 19, 17, '2023-10-22 16:12:33', NULL, 0),
+(40, 52, 19, 18, '2023-10-22 16:12:33', NULL, 0),
+(41, 52, 19, 17, '2023-10-22 16:13:22', NULL, 0),
+(42, 52, 19, 18, '2023-10-22 16:13:22', NULL, 0),
+(43, 53, 19, 17, '2023-10-22 19:35:53', NULL, 0),
+(44, 53, 19, 18, '2023-10-22 19:35:53', NULL, 0),
+(45, 53, 19, 19, '2023-10-22 19:35:53', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -94,7 +90,7 @@ INSERT INTO `enroll_course` (`id`, `student_id`, `class_id`, `course_id`, `dos`,
 CREATE TABLE `fees_details` (
   `id` int(11) NOT NULL,
   `stdid` int(11) NOT NULL DEFAULT 0,
-  `grade_id` int(11) DEFAULT NULL,
+  `grade_id` int(11) NOT NULL DEFAULT 0,
   `admissionfee` int(11) NOT NULL DEFAULT 0,
   `tutionfee` int(11) NOT NULL DEFAULT 0,
   `hostelfee` int(11) NOT NULL DEFAULT 0,
@@ -102,6 +98,8 @@ CREATE TABLE `fees_details` (
   `transportfee` int(11) NOT NULL DEFAULT 0,
   `otherfee` int(11) NOT NULL DEFAULT 0,
   `totalfee` int(11) NOT NULL DEFAULT 0,
+  `dscount_percent` int(11) NOT NULL DEFAULT 0,
+  `total_discount` int(11) NOT NULL DEFAULT 0,
   `advancefee` int(11) NOT NULL DEFAULT 0,
   `remainfees` int(11) NOT NULL DEFAULT 0,
   `delete_status` int(11) NOT NULL DEFAULT 0,
@@ -112,13 +110,12 @@ CREATE TABLE `fees_details` (
 -- Dumping data for table `fees_details`
 --
 
-INSERT INTO `fees_details` (`id`, `stdid`, `grade_id`, `admissionfee`, `tutionfee`, `hostelfee`, `libraryfee`, `transportfee`, `otherfee`, `totalfee`, `advancefee`, `remainfees`, `delete_status`, `timestamp`) VALUES
-(20, 42, 19, 1000, 1800, 4000, 100, 3000, 0, 9900, 0, 9000, 0, '2023-09-29 00:00:00'),
-(21, 43, 19, 5000, 2000, 2000, 200, 2000, 200, 11400, 0, 10900, 0, '2023-09-01 00:00:00'),
-(22, 43, 19, 0, 6000, 5000, 0, 0, 0, 11000, 0, 11000, 0, '2023-10-01 00:00:00'),
-(24, 49, 19, 1000, 3000, 0, 2000, 2000, 0, 8000, 0, 7700, 0, '2023-10-02 00:00:00'),
-(25, 49, 19, 0, 3000, 0, 2000, 2000, 0, 7000, 0, 7000, 0, '2023-11-02 00:00:00'),
-(26, 51, 19, 1000, 20000, 0, 0, 0, 0, 21000, 0, 15000, 0, '2023-10-11 00:00:00');
+INSERT INTO `fees_details` (`id`, `stdid`, `grade_id`, `admissionfee`, `tutionfee`, `hostelfee`, `libraryfee`, `transportfee`, `otherfee`, `totalfee`, `dscount_percent`, `total_discount`, `advancefee`, `remainfees`, `delete_status`, `timestamp`) VALUES
+(27, 52, 19, 1000, 1850, 0, 0, 3500, 150, 6500, 10, 5850, 2000, 3850, 0, '2023-10-22 00:00:00'),
+(28, 52, 19, 0, 1800, 0, 150, 3000, 10, 4960, 0, 0, 0, 3960, 0, '2023-11-01 00:00:00'),
+(29, 52, 19, 2000, 5000, 3500, 400, 3500, 150, 14550, 25, 10913, 0, 5813, 0, '2023-10-22 00:00:00'),
+(30, 53, 19, 1000, 1800, 0, 0, 3000, 0, 5800, 10, 5220, 1000, 4220, 0, '2023-10-22 00:00:00'),
+(31, 53, 19, 0, 1850, 0, 150, 3000, 0, 5000, 0, 0, 0, 3000, 0, '2023-11-01 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -128,8 +125,8 @@ INSERT INTO `fees_details` (`id`, `stdid`, `grade_id`, `admissionfee`, `tutionfe
 
 CREATE TABLE `fees_transaction` (
   `id` int(255) NOT NULL,
-  `trans_id` int(11) DEFAULT NULL,
-  `stdid` varchar(255) NOT NULL,
+  `trans_id` int(11) NOT NULL DEFAULT 0,
+  `stdid` int(11) NOT NULL DEFAULT 0,
   `grade` varchar(255) DEFAULT NULL,
   `paid` int(255) NOT NULL,
   `submitdate` datetime NOT NULL DEFAULT current_timestamp(),
@@ -141,13 +138,13 @@ CREATE TABLE `fees_transaction` (
 --
 
 INSERT INTO `fees_transaction` (`id`, `trans_id`, `stdid`, `grade`, `paid`, `submitdate`, `transcation_remark`) VALUES
-(55, 20, '42', 'Class 5th', 900, '2023-09-29 09:18:03', 'Initial Payment received'),
-(56, 21, '43', 'Class 5th', 500, '2023-09-30 12:29:44', '500 received'),
-(57, 24, '49', 'Class 5th', 300, '2023-10-02 08:41:33', '300 Payment received'),
-(58, 26, '51', 'Class 5th', 1000, '2023-10-11 03:41:19', 'payment received '),
-(59, 26, '51', 'Class 5th', 1500, '2023-10-11 03:41:35', 'payment received'),
-(60, 26, '51', 'Class 5th', 3000, '2023-10-11 03:41:48', 'received'),
-(61, 26, '51', 'Class 5th', 500, '2023-10-11 03:42:01', 'received');
+(62, 27, 52, '19', 2000, '2023-10-22 15:17:29', 'Advance payment'),
+(63, 28, 52, 'Class 5th', 1000, '2023-10-22 18:40:33', 'payment received'),
+(64, 29, 52, 'Class 5th', 100, '2023-10-22 19:18:51', 'payment recevied'),
+(65, 29, 52, 'Class 5th', 5000, '2023-10-22 19:19:12', 'payment received'),
+(66, 30, 53, '19', 1000, '2023-10-22 19:38:06', 'Advance payment'),
+(67, 31, 53, 'Class 5th', 1000, '2023-10-22 19:40:52', 'payment received '),
+(70, 31, 53, 'Class 5th', 1000, '2023-10-22 19:42:15', 'payment received ');
 
 -- --------------------------------------------------------
 
@@ -186,6 +183,8 @@ CREATE TABLE `student` (
   `emailid` varchar(255) NOT NULL,
   `upassword` varchar(250) NOT NULL DEFAULT 'std123',
   `sname` varchar(255) NOT NULL,
+  `srollno` varchar(255) NOT NULL DEFAULT '1',
+  `father_name` varchar(255) DEFAULT NULL,
   `joindate` datetime NOT NULL,
   `about` text NOT NULL,
   `contact` varchar(255) NOT NULL,
@@ -201,12 +200,9 @@ CREATE TABLE `student` (
 -- Dumping data for table `student`
 --
 
-INSERT INTO `student` (`id`, `emailid`, `upassword`, `sname`, `joindate`, `about`, `contact`, `fees`, `grade`, `balance`, `delete_status`, `subject`, `image`) VALUES
-(42, 'sajidali@gmail.com', '5807ce7e9cb25bacaf6ee26cf806245704d3544b', 'Sajid Ali', '2023-09-01 00:00:00', 'New Student', '03488092160', 9900, '19', 9000, '0', NULL, NULL),
-(43, 'demouser1@gmail.com', '1b5e54fe88b68bc480860406e0fc688edde58fcd', 'Demo User1', '2023-09-01 00:00:00', 'New Student', '03481234888', 11000, '19', 11000, '0', NULL, NULL),
-(49, 'mali123@gmail.com', '5cf64593ce4aeacd56dbb5f5ec4db1fb30c6541a', 'M Ali', '2023-10-01 00:00:00', 'New Enroll ', '03495823432', 7000, '19', 7000, '0', NULL, 'images/my-pic.jpg'),
-(50, 'mhdali@gmail.com', '11327ddc6c6fce12cebf73b9e89b6ecdcdfc95ee', 'M Ali', '2023-10-01 00:00:00', 'new student enroll', '0382342324', 0, '13', 0, '1', NULL, NULL),
-(51, 'shakoorali@gmail.com', '28d09525e39fe33e30f641e9c3df1542f4907466', 'Shakoor Ali', '2023-10-02 00:00:00', 'new student  ', '028423424', 21000, '19', 15000, '0', NULL, 'images/WhatsApp Image 2023-09-21 at 22.21.07.jpg');
+INSERT INTO `student` (`id`, `emailid`, `upassword`, `sname`, `srollno`, `father_name`, `joindate`, `about`, `contact`, `fees`, `grade`, `balance`, `delete_status`, `subject`, `image`) VALUES
+(52, 'karamat@gmail.com', 'c51e6d1e1f41b5799bb6a382e9ae8909dd5e6f50', 'Karamat Hussain', '11', 'Muhammad Ibrahim', '2023-10-04 00:00:00', '', '03823742342', 10913, '19', 5813, '0', NULL, NULL),
+(53, 'muhammadali@gmail.com', '756536566c0e4f39e236fd391bd86e682a43b5b5', 'Muhammad Ali', '01', 'Ghulam Abbas', '2023-10-04 00:00:00', 'new Student', '03823742342', 5000, '19', 3000, '0', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -238,7 +234,7 @@ INSERT INTO `user` (`id`, `username`, `password`, `name`, `emailid`, `lastlogin`
 
 CREATE TABLE `user_queries` (
   `id` int(11) NOT NULL,
-  `stdid` int(11) DEFAULT NULL,
+  `stdid` int(11) NOT NULL DEFAULT 0,
   `uname` varchar(250) DEFAULT NULL,
   `uemail` varchar(250) DEFAULT NULL,
   `umessage` text DEFAULT NULL,
@@ -251,8 +247,8 @@ CREATE TABLE `user_queries` (
 --
 
 INSERT INTO `user_queries` (`id`, `stdid`, `uname`, `uemail`, `umessage`, `delete_status`, `timestamp`) VALUES
-(1, 0, 'mu ali', 'ads@mfil.com', 'megsar dfsadfsa', 0, '2023-10-10 23:44:27'),
-(2, 51, 'newer', 'muhammadalid15@gmail.com', 'sfhhdfhadf', 0, '2023-10-10 23:46:35');
+(4, 52, 'Karamat Hussain', 'karamat@gmail.com', 'This is new message from user karamat', 0, '2023-10-22 14:05:10'),
+(5, 53, 'Muhammad Ali', 'muhammadali@gmail.com', 'this is testing message form user m ali', 0, '2023-10-22 14:44:27');
 
 --
 -- Indexes for dumped tables
@@ -278,7 +274,8 @@ ALTER TABLE `enroll_course`
 --
 ALTER TABLE `fees_details`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `stdid` (`stdid`);
+  ADD KEY `stdid` (`stdid`),
+  ADD KEY `grade_id` (`grade_id`);
 
 --
 -- Indexes for table `fees_transaction`
@@ -308,7 +305,8 @@ ALTER TABLE `user`
 -- Indexes for table `user_queries`
 --
 ALTER TABLE `user_queries`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `stdid` (`stdid`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -324,19 +322,19 @@ ALTER TABLE `course`
 -- AUTO_INCREMENT for table `enroll_course`
 --
 ALTER TABLE `enroll_course`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `fees_details`
 --
 ALTER TABLE `fees_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `fees_transaction`
 --
 ALTER TABLE `fees_transaction`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `grade`
@@ -348,7 +346,7 @@ ALTER TABLE `grade`
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -360,7 +358,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user_queries`
 --
 ALTER TABLE `user_queries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -378,7 +376,21 @@ ALTER TABLE `enroll_course`
 -- Constraints for table `fees_details`
 --
 ALTER TABLE `fees_details`
-  ADD CONSTRAINT `fees_details_ibfk_1` FOREIGN KEY (`stdid`) REFERENCES `student` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fees_details_ibfk_1` FOREIGN KEY (`stdid`) REFERENCES `student` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fees_details_ibfk_2` FOREIGN KEY (`grade_id`) REFERENCES `grade` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `student`
+--
+ALTER TABLE `student`
+  ADD CONSTRAINT `student_ibfk_1` FOREIGN KEY (`id`) REFERENCES `fees_details` (`stdid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `student_ibfk_2` FOREIGN KEY (`id`) REFERENCES `enroll_course` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `user_queries`
+--
+ALTER TABLE `user_queries`
+  ADD CONSTRAINT `user_queries_ibfk_1` FOREIGN KEY (`stdid`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
