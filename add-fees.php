@@ -20,19 +20,29 @@ if (isset($_POST['save'])) {
   $adv_fees = mysqli_real_escape_string($conn, $_POST['adv_fees']);
   $rem_fees = mysqli_real_escape_string($conn, $_POST['rem_fees']);
 
+  
+  $ds_fees = mysqli_real_escape_string($conn, $_POST['ds_fees']);
+  $dscount_percent = mysqli_real_escape_string($conn, $_POST['dscount_percent']);
+
   if ($_POST['action'] == "sv1") {
 
-      $sql = $conn->query("INSERT INTO fees_details (stdid,grade_id,admissionfee, tutionfee,hostelfee, libraryfee, transportfee, otherfee, totalfee,advancefee,remainfees, timestamp) VALUES ('$std_id', '$grade', '$adm_fees',  '$tu_fees', '$ho_fees', '$lib_fees', '$trn_fees', '$otr_fees', '$tl_fees','$adv_fees', '$rem_fees', '$feesdate')");
+      $sql = $conn->query("INSERT INTO fees_details (stdid,grade_id,admissionfee, tutionfee,hostelfee, libraryfee, transportfee, otherfee, totalfee ,dscount_percent,total_discount,advancefee,remainfees, timestamp) VALUES ('$std_id', '$grade', '$adm_fees',  '$tu_fees', '$ho_fees', '$lib_fees', '$trn_fees', '$otr_fees', '$tl_fees', '$dscount_percent','$ds_fees','$adv_fees', '$rem_fees', '$feesdate')");
        
       
 		 $feeID = $conn->insert_id;
+     $remark = "Advance payment";
      if($adv_fees){
-      $sql = $conn->query("INSERT INTO fees_transaction (stdid,trans_id,grade,paid, transcation_remark) VALUES ('$std_id','$feeID', '$grade', '$adv_fees', '-')");
+      $sql = $conn->query("INSERT INTO fees_transaction (stdid,trans_id,grade,paid, transcation_remark) VALUES ('$std_id','$feeID', '$grade', '$adv_fees', '$remark')");
+    }
+    $update_sd = "";
+    if($dscount_percent != "0"){
+      $update_sd = "UPDATE student SET fees= '$ds_fees',  balance = '$rem_fees' WHERE id= '$std_id' ";
+    }else{
+      $update_sd = "UPDATE student SET fees= '$tl_fees',  balance = '$rem_fees' WHERE id= '$std_id' ";
     }
     
-  
-      $update_sd = "UPDATE student SET fees= '$tl_fees',  balance = '$rem_fees' WHERE id= '$std_id' ";
-  $sql = $conn->query($update_sd);
+    $sql = $conn->query($update_sd);
+    
 
   
   
@@ -109,30 +119,10 @@ include("php/header.php");
             <form action="add-fees.php" method="post" id="signupForm1" class="form-horizontal">
               <div class="panel-body">
 
-                <div class="form-group">
-                  <label class="col-sm-3 control-label" for="Old">Student * </label>
-                  <div class="col-sm-9">
-                    <select class="form-control" id="std_id" name="std_id" required>
-                      <option value="" selected>Select Class Level</option>
-                      <?php
-                      $gid = "";
-                      (isset($_GET['gid'])) ? $gid = $_GET['gid'] : "";
-                      $sql = "select student.id, student.sname  from student  where delete_status='0' ";
-                      $stdres = $conn->query($sql);
-
-                      while ($r1 = $stdres->fetch_assoc()) {
-                        $sl = (isset($_GET['std']) && $_GET['std'] == $r1['id']) ? "selected" : "";
-                        echo '<option ' . $sl . ' value="' . $r1['id'] . '">' . $r1['sname'] . '</option>';
-                      }
-
-                      ?>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
+              <div class="form-group">
                   <label class="col-sm-3 control-label " for="Old"> Class* </label>
                   <div class="col-sm-9">
+                
                     <select class="form-control" id="grade" name="grade" onchange="changeGrade(this.value)" required>
                       <option value="" selected>Select Class Level</option>
                       <?php
@@ -152,13 +142,34 @@ include("php/header.php");
                     </select>
                   </div>
                 </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="Old">Student * </label>
+                  <div class="col-sm-9">
+                    <select class="form-control" id="std_id" name="std_id" required>
+                      <option value="" selected>Select Enrolled Student</option>
+                      <?php
+                      $gid = "";
+                      (isset($_GET['gid'])) ? $gid = $_GET['gid'] : "";
+                      $sql = "select student.id, student.sname  from student  where delete_status='0' ";
+                      $stdres = $conn->query($sql);
+
+                      while ($r1 = $stdres->fetch_assoc()) {
+                        $sl = (isset($_GET['std']) && $_GET['std'] == $r1['id']) ? "selected" : "";
+                        echo '<option ' . $sl . ' value="' . $r1['id'] . '">' . $r1['sname'] . '</option>';
+                      }
+
+                      ?>
+                    </select>
+                  </div>
+                </div>
                    
                 <div class="form-group">
 										<label class="col-sm-2 control-label" for="Old">Date* </label>
 										<div class="col-sm-10">
 											<input type="date" class="form-control" placeholder="Date of Joining"
 												id="joindate" name="feesdate"
-												value="<?php echo date("Y-m-d"); ?>"
+												value="<?php echo date("d/M/Y"); ?>"
 												style="background-color: #fff;"  />
 										</div>
 									</div>
@@ -213,12 +224,33 @@ include("php/header.php");
                   </div>
                 </div>
 
+                <div class="form-group"  id="discount_div">
+                  <label class="col-sm-2 control-label" for="ds_fees">Discounted Fees </label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control " id="ds_fees" name="ds_fees" value="<?php ?>" readonly />
+                  </div>
+                </div>
+
                 <fieldset class="scheduler-border">
                   <legend class="scheduler-border">Optional Fees:</legend>
+
+                   
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="dscount">Discount  </label>
+                  <div class="col-sm-10">
+                    <select class="form-control" id="dscount" name="dscount_percent" onchange="disountFees(this.value)" required >
+                      <option value="0" selected> 0% (Default)</option>
+                      <option value="10" > 10% (Discount) </option>
+                      <option value="25" > 25% (Discount) </option>
+                      <option value="50" > 50%  (Discount) </option>
+                    </select>
+                  </div>
+                </div>
+
                   <div class="form-group">
                     <label class="col-sm-2 control-label" for="adv_fees">Advance Fees </label>
                     <div class="col-sm-10">
-                      <input type="number" class="form-control getfees" id="adv_fees" name="adv_fees" value="<?php ?>" />
+                      <input type="number" class="form-control " id="adv_fees" name="adv_fees" value="<?php ?>" />
                     </div>
                   </div>
 
@@ -249,8 +281,50 @@ include("php/header.php");
     
 
     <script type="text/javascript">
+      let disocunt_total = 0;
+
+      function disountFees(discount){
+        
+        const disc = discount;
+
+        const admissionFee = parseFloat($('#adm_fees').val()) || 0;
+        const tutionFee = parseFloat($('#tu_fees').val()) || 0;
+        const transportFee = parseFloat($('#trn_fees').val()) || 0;
+        const hostelFee = parseFloat($('#ho_fees').val()) || 0;
+        const libraryFee = parseFloat($('#lib_fees').val()) || 0;
+        const otherFee = parseFloat($('#otr_fees').val()) || 0;
+        $('#adv_fees').val("");
+
+						const totalFee = admissionFee+ tutionFee + transportFee + hostelFee + libraryFee + otherFee;
+	
+        if(totalFee != "" || totalFee != "0"){
+           disocunt_total = parseFloat((disc *totalFee) / 100);
+            disocunt_total = totalFee - disocunt_total;
+            $('#ds_fees').val(disocunt_total);
+            $("#rem_fees").val(disocunt_total);
+
+								$('#adv_fees').rules("add", {
+									max: parseInt(disocunt_total)
+								});
+
+          
+          if(disocunt_total){
+                // let discount_div = $('#discount_div');
+                let ds_fees = $('#ds_fees');
+                // discount_div.css('display', "block");
+                ds_fees.val(disocunt_total);
+            }
+
+        }
+
+        
+      
+      }
 
 function calculateFee(){
+  
+           const dscount = parseFloat($('#dscount').val(0));
+  
 				    const admissionFee = parseFloat($('#adm_fees').val()) || 0;
 				    const tutionFee = parseFloat($('#tu_fees').val()) || 0;
 			    	const transportFee = parseFloat($('#trn_fees').val()) || 0;
@@ -264,6 +338,8 @@ function calculateFee(){
 							if (totalFee != '' && !isNaN(totalFee)) {
 								$("#adv_fees").removeAttr("readonly");
 								$("#rem_fees").val(totalFee);
+                $('#ds_fees').val("");
+                $("#adv_fees").val("");
 								$('#adv_feess').rules("add", {
 									max: parseInt(totalFee)
 								});
@@ -281,18 +357,18 @@ function calculateFee(){
 
       $("#adv_fees").keyup(function () {
 
-var advancefees = parseInt($.trim($(this).val()));
-var totalfee = parseInt($("#tl_fees").val());
-if (advancefees != '' && !isNaN(advancefees) && advancefees <= totalfee) {
-  var balance = totalfee - advancefees;
-  $("#rem_fees").val(balance);
+      var advancefees = parseInt($.trim($(this).val()));
+      var totalfee = parseInt(disocunt_total);
+      if (advancefees != '' && !isNaN(advancefees) && advancefees <= totalfee) {
+        var balance = totalfee - advancefees;
+        $("#rem_fees").val(balance);
 
-}
-else {
-  $("#rem_fees").val(totalfee);
-}
+      }
+      else {
+        $("#rem_fees").val(totalfee);
+      }
 
-});
+      });
 
 
         /*
@@ -425,29 +501,37 @@ if ( $_GET['action'] == "" ) {
 									<th>#</th>
 									<th>St. Name | Class</th>
 									<th>Total Fee</th>
+									<th>Discount </th>
                   <th>Remain Fee</th>
                   <th>Fee Issue Date </th>
 									<th>Action</th>
 								</tr>
 							</thead>
+              
 							<tbody>
 								<?php
-								$sql = "select fd.id ,fd.totalfee,fd.remainfees, fd.timestamp, std.sname,gd.grade  from fees_details fd 
+								$sql = "select fd.id ,fd.totalfee,fd.dscount_percent,fd.total_discount,fd.remainfees, fd.timestamp, std.sname,gd.grade  from fees_details fd 
                 JOIN student std ON fd.stdid = std.id 
                 JOIN grade gd ON fd.grade_id = gd.id
                 where fd.delete_status='0'";
 								$q = $conn->query($sql);
 								$i = 1;
 								while ($r = $q->fetch_assoc()) {
+                  $total_fee =  $r['totalfee'] ;
+                  if($r['dscount_percent'] != 0)
+                  {
+                    $total_fee = '<strike>' . $r['totalfee'] . '</strike>';
+                  }
 									echo '<tr>
                                             <td>' . $i . '</td>
                                             <td>' . $r['sname'] ." | ".$r['grade']. '</td>
-                                            <td>' . $r['totalfee'] . '</td>
+                                            <td>' . $total_fee . '</td>
+                                            <td>' . $r['total_discount'] ." ( ".$r['dscount_percent']. '% )</td>
                                             <td>' . $r['remainfees'] . '</td>
                                             <td>' .date("d-M-Y", strtotime($r['timestamp'])) . '</td>
 											<td>
                      
-                      <button class="btn btn-info btn-sm"  onclick="openModel('.$r['id'].')" > More Details </button>
+                      <button class="btn btn-info btn-sm"  onclick="openModel('.$r['id'].')" > Generate Slip </button>
 
                       <button class="btn btn-success btn-sm"  onclick="collectFee('.$r['id'].')" >Collect Fee </button>
 											
@@ -468,6 +552,18 @@ if ( $_GET['action'] == "" ) {
     <?php }?>
 			<script src="js/dataTable/jquery.dataTables.min.js"></script>
 			<script>
+
+        function changeGrade(class_id){
+          $.ajax({
+            type: 'post',
+            url: 'getEnrolledStd.php',
+            data: {student:class_id,req:'2'},
+            success: function (data) {
+              
+              $('#std_id').html(data);
+            }
+          });
+        }
 
 function openModel(sid){
           // alert(sid)

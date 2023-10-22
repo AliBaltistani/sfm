@@ -9,6 +9,7 @@ $action = "add";
 $id = "";
 $emailid = '';
 $sname = '';
+$father_name = '';
 $joindate = '';
 $remark = '';
 $contact = '';
@@ -19,6 +20,7 @@ $about = '';
 if (isset($_POST['save'])) {
 
 	$sname = mysqli_real_escape_string($conn, $_POST['sname']);
+	$fname = mysqli_real_escape_string($conn, $_POST['fname']);
 	$joindate = mysqli_real_escape_string($conn, $_POST['joindate']);
 	$contact = mysqli_real_escape_string($conn, $_POST['contact']);
 	$about = mysqli_real_escape_string($conn, $_POST['about']);
@@ -32,7 +34,7 @@ if (isset($_POST['save'])) {
 
 	if ($_POST['action'] == "add") {
 
-		$q1 = $conn->query("INSERT INTO student (sname,upassword,joindate,contact,about,emailid) VALUES ('$sname','$userpassword','$joindate','$contact','$about','$emailid')");
+		$q1 = $conn->query("INSERT INTO student (sname, father_name,upassword,joindate,contact,about,emailid) VALUES ('$sname', '$fname','$userpassword','$joindate','$contact','$about','$emailid')");
       
 		if($q1){
 			echo '<script type="text/javascript">window.location="student.php?act=1";</script>';
@@ -55,7 +57,7 @@ if (isset($_POST['save'])) {
 
 		$student_id = mysqli_real_escape_string($conn, $_POST['id']);
 	
-		$rp = "UPDATE  student  SET sname = '$sname', contact = '$contact', about = '$about' ,emailid = '$emailid' ".$updatePasw." WHERE  id  = '$student_id'";
+		$rp = "UPDATE  student  SET sname = '$sname',father_name = '$fname', contact = '$contact', about = '$about' ,emailid = '$emailid' ".$updatePasw." WHERE  id  = '$student_id'";
 	
 
 		$sql = $conn->query($rp);
@@ -178,9 +180,15 @@ include("php/header.php");
 								<fieldset class="scheduler-border">
 									<legend class="scheduler-border">Personal Information:</legend>
 									<div class="form-group">
-										<label class="col-sm-2 control-label" for="Old">Full Name* </label>
+										<label class="col-sm-2 control-label" for="Old">Student Name* </label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" id="sname" name="sname" value="<?php echo $sname; ?>" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label" for="Old">Father Name* </label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" id="fname" name="fname" value="<?php echo $father_name; ?>" />
 										</div>
 									</div>
 									<div class="form-group">

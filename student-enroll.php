@@ -8,12 +8,14 @@ $action = "add";
 $grade = '';
 $detail = '';
 $id = '';
+$srollno = '';
 if (isset($_POST['save'])) {
   
 
   $std_id = mysqli_real_escape_string($conn, $_POST['std_id']);
   $grade = mysqli_real_escape_string($conn, $_POST['grade']);
   $courses =  $_POST['course'];
+  $rollno =  $_POST['std_rollno'];
 
 
   if ($_POST['action'] == "sv1") {
@@ -23,7 +25,7 @@ if (isset($_POST['save'])) {
       $sql = $conn->query("INSERT INTO enroll_course (student_id,class_id, course_id) VALUES ('$std_id','$grade','$crs')");
     }
   
-    $update_sd = "UPDATE student SET grade= '$grade' WHERE id = '$std_id' ";
+    $update_sd = "UPDATE student SET grade= '$grade', srollno = '$rollno' WHERE id = '$std_id' ";
   $sql = $conn->query($update_sd);
 
     echo '<script type="text/javascript">window.location="student-enroll.php?act=1";</script>';
@@ -57,16 +59,13 @@ if (isset($_GET['action']) && $_GET['action'] == "delete") {
 $action = "add";
 if (isset($_GET['action']) && $_GET['action'] == "edit") {
   $action = "update";
-  // echo $id = isset($_GET['id']) ? mysqli_real_escape_string($conn, $_GET['id']) : '';
+  echo $id = $_REQUEST["std"];
  
-  // $sqlEdit = $conn->query("SELECT * FROM grade WHERE id='" . $id . "'");
-  // if ($sqlEdit->num_rows) {
-  //   $rowsEdit = $sqlEdit->fetch_assoc();
-  //   extract($rowsEdit);
+   $sqlEdit = $conn->query("SELECT srollno FROM student WHERE id='" . $id . "'");
+    $rowsEdit = $sqlEdit->fetch_assoc();
+    { extract($rowsEdit);}
     
-  // } else {
-  //   $_GET['action'] = "";
-  // }
+ 
 
 }
 
@@ -146,15 +145,17 @@ include("php/header.php");
             <form action="student-enroll.php" method="post" id="signupForm1" class="form-horizontal">
               <div class="panel-body">
 
+              
 
                 <fieldset class="scheduler-border">
                   <legend class="scheduler-border"> Course Enrollment:</legend>
 
+                   
                   <div class="form-group">
                     <label class="col-sm-3 control-label" for="Old">Student * </label>
                     <div class="col-sm-9">
                       <select class="form-control" id="std_id" name="std_id" required>
-                        <option value="" selected>Select Class Level</option>
+                        <option value="" selected>Select Student</option>
                         <?php
                         $gid = "";
                         (isset($_GET['gid'])) ? $gid = $_GET['gid'] : "";
@@ -170,6 +171,15 @@ include("php/header.php");
                       </select>
                     </div>
                   </div>
+
+ 
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label" for="Old">Enter Roll No </label>
+                    <div class="col-sm-9">
+                       <input type="text" class="form-control " id="std_rollno" name="std_rollno" value="<?php echo $srollno; ?>" required />
+                    </div>
+                  </div>
+
 
                   <div class="form-group">
                     <label class="col-sm-3 control-label getfees" for="Old"> Class* </label>
@@ -193,7 +203,8 @@ include("php/header.php");
                       </select>
                     </div>
                   </div>
-                    
+                  
+                  
                   <?php
                   if(isset($_GET['action']) && $_GET['action'] == "edit" && isset($_GET['cls'])){ 
                   ?>

@@ -72,6 +72,7 @@ include("layouts/header.php");
                   <th>#</th>
                   <th>Name</th>
                   <th>Total Fees</th>
+                  <th>Discount</th>
                   <th>Remaining Fees</th>
                   <th>DOJ</th>
                   <th>Action</th>
@@ -86,10 +87,16 @@ include("layouts/header.php");
                 $q = $conn->query($sql);
                 $i = 1;
                 while ($r = $q->fetch_assoc()) {
+                  $total_fee =  $r['totalfee'] ;
+                  if($r['dscount_percent'] != 0)
+                  {
+                    $total_fee = '<strike>' . $r['totalfee'] . '</strike>';
+                  }
                   echo '<tr>
                               <td>' . $i . '</td>
                               <td>' . $r['sname'] . '</td>
-                              <td>' . $r['totalfee'] . '</td>
+                              <td>' . $total_fee . '</td>
+                              <td>' . $r['total_discount'] ." ( ".$r['dscount_percent']. '% )</td>
                               <td class="text-danger" >' . $r['remainfees'] . '</td>
                               <td>' . date("d-M-Y", strtotime($r['timestamp'])) . '</td>
 											<td>

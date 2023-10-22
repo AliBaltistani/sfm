@@ -196,7 +196,7 @@ include("layouts/header.php");
                         <p class="text-secondary mb-1">
                           <?php
                           if (isset($_GET['acts']) && $_GET['acts'] == "edit") {
-                            echo '<textarea name="about" placeholder="Tell us About yourself" >' . $about . ' </textarea>';
+                            echo '<textarea name="about" placeholder="Tell us About yourself" >'.$about.'</textarea>';
                           } else {
                             echo $about;
                           }
@@ -363,7 +363,7 @@ include("layouts/header.php");
 
     <!-- Modal -->
     <div class="modal fade" id="myModal1" role="dialog">
-      <div class="modal-dialog modal-lg">
+      <div class="modal-dialog modal-md">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -371,25 +371,15 @@ include("layouts/header.php");
           </div>
           <div class="modal-body" id="formcontent">
             <form action="profile.php" method="post">
-            <table width="80%" style="margin:auto;">
-              <tr>
-                <td>Name:</td>
-                <td>
-                <input type="hidden" name="sid" value="<?php echo $id ?>">
-                  <input type="text" name="uname" class="form-control" placeholder="Enter your full name" required>
-                </td>
-              </tr>
-              <tr>
-                <td>Email:</td>
-                <td>
-                  <input style="margin-top:20px" type="email" name="uemail"class="form-control"
-                    placeholder="Enter your email address">
-                </td>
-              </tr>
+            <table style="width:100%" >
+              
               <tr>
                 <td>Message:</td>
                 <td>
-                  <textarea style="margin-top:20px" name="umessage" class="form-control" required
+                <input type="hidden" name="sid" value="<?php echo $id ?>">
+                <input type="hidden" name="uname" value="<?php echo $sname ?>">
+                <input type="hidden" name="uemail" value="<?php echo $emailid ?>">
+                  <textarea style="margin-top:20px" name="umessage" class="form-control " required
                     placeholder="Write your message here..."></textarea>
                 </td>
               </tr>

@@ -37,7 +37,7 @@ if (isset($_POST['save'])) {
  $sid = (isset($_POST['student'])) ? mysqli_real_escape_string($conn, $_POST['student']) : '';
 
   
- $sql = "SELECT  fd.id AS feeID, fd.totalfee, fd.advancefee, fd.remainfees , fd.timestamp, std.id, std.sname, std.contact, gd.grade 
+ $sql = "SELECT  fd.id AS feeID, fd.totalfee,fd.total_discount,fd.dscount_percent, fd.advancefee, fd.remainfees , fd.timestamp, std.id, std.sname, std.contact, gd.grade 
           FROM fees_details fd 
           JOIN student std ON fd.stdid = std.id 
           JOIN grade gd ON fd.grade_id = gd.id
@@ -70,13 +70,13 @@ if (isset($_POST['save'])) {
   <div class="form-group">
     <label class="col-sm-3 control-label" for="">Date </label>
     <div class="col-sm-9">
-      <input class="form-control" id="sname" name="date"  value="<?php echo $sr['timestamp']; ?>" readonly="true" />
+      <input class="form-control" id="sname" name="date"  value="<?php echo date("d-M-Y", strtotime($sr['timestamp'])); ?>" readonly="true" />
     </div>
   </div>
   <div class="form-group">
     <label class="col-sm-3 control-label" for="">Total Fee </label>
     <div class="col-sm-9">
-      <input class="form-control" id="sname" name="tfee"  value="<?php echo $sr['totalfee']; ?>" readonly="true" />
+      <input class="form-control" id="sname" name="tfee"  value="<?php echo ($sr['dscount_percent'] == "0") ? $sr['totalfee'] : $sr['total_discount'] ; ?>" readonly="true" />
     </div>
   </div>
   <div class="form-group">
